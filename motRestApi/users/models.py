@@ -5,15 +5,20 @@ from django.db.models.fields import DateTimeField
 
 
 class User(AbstractUser):
-    id_number = models.CharField(max_length=10, primary_key=True)
+    number_id = models.CharField(max_length=10)
     is_operador = models.BooleanField('Es un operador',default=False)
     is_motorizado = models.BooleanField('Es un motorizado',default=False)
-    #profile_pic = models.ImageField()
-    birth_date = models.DateField()
-    gender = models.CharField(max_length=4)
-
+    #profile_pic = models.ImageField(upload_to = "images/profiles/")
+    birth_date = models.DateField(null=True)
+    gender = models.CharField(max_length=4, null=True)
 
 class Motorizado(User):
-    pass    
+    isOnline = models.BooleanField("",default=False)
 
+
+
+class Ubicacion(models.Model):
+    latitud = models.FloatField()
+    longitud = models.FloatField()
+    
 

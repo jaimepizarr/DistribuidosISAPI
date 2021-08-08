@@ -4,4 +4,8 @@ from users.models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    pass
+    add_fieldsets = (
+        (None,{"fields":("is_operador","is_motorizado")}),
+        )
+    
+    
