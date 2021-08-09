@@ -7,7 +7,7 @@ from rest_framework import status
 
 class UserSignUp(APIView):
     def post(self,request):
-        user = UserSerializer(data=request.POST)
+        user = UserSerializer(data=request.data)
         user.is_valid(raise_exception=True)
         user.save()
         return Response(status=status.HTTP_200_OK, data=user.data)
