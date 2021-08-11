@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'despachoMotorizado',
         'USER':'root',
-        'PASSWORD':'1803mechilotte',
+        'PASSWORD':'',
         'HOST':'localhost',
         'PORT':'3306'
     },
@@ -112,11 +112,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8080",
+#     "http://localhost:3060",
+#     "http://localhost:3200",
+#     "http://localhost:3100",
+    
+# ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://localhost:3060",
-]
 
 
 # Internationalization
