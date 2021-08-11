@@ -4,6 +4,10 @@ from django.db.models.base import Model
 from django.db.models.fields import DateTimeField
 # Create your models here.
 
+class Location(models.Model):
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    reference = models.TextField()
 
 class User(AbstractUser):
     number_id = models.CharField(max_length=10)
@@ -12,16 +16,19 @@ class User(AbstractUser):
     profile_pic = models.ImageField(blank=True, null=True, upload_to = "images/profiles/")
     birth_date = models.DateField(null=True)
     gender = models.CharField(max_length=4, null=True)
+    home_loc = models.ForeignKey(Location,on_delete=models.SET_NULL,null=True)
 
-class Location(models.Model):
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    reference = models.TextField()
+    #is_registered
+
 
 
 class Motorizado(User):
     isOnline = models.BooleanField("",default=False)
-    home_loc = models.ForeignKey(Location,on_delete=models.SET_NULL,null=True)
+    id_front_photo = models.ImageField("Front photo of id", upload_to="images/ids/")
+    id_back_photo = models.ImageField("Back photo of id", upload_to="images/ids/")
+    license_front_photo = models.ImageField("Front license photo", upload_to="images/licenses/")
+    license_back_photo = models.ImageField("Back license photo", upload_to="images/licenses/")
+    #admin = models.ForeignKey(User,on_delete=models.CASCADE, related_name="Admin")
 
 class MotValidation(models.Model):
     motorizado = models.ForeignKey(Motorizado, on_delete=models.SET_NULL,related_name="Motorizado",null=True)
@@ -72,8 +79,15 @@ class Vehicle(models.Model):
     year = models.IntegerField("Year of bought")
     color = models.CharField("Color of car", max_length=15)
     plate_number = models.CharField("Number of the car plate",max_length=10)
+    plate_photo = models.ImageField("Plate photo", upload_to="images/plates")
+    right_photo = models.ImageField("Right photo of the vehicle", upload_to="images/vehicles/")
+    left_photo = models.ImageField("Left photo of the vehicle", upload_to="images/vehicles/")
+    front_photo = models.ImageField("Front photo of the vehicle", upload_to="images/vehicles/")
+    back_photo = models.ImageField("Back photo of the vehicle", upload_to="images/vehicles/")
+    front_regis_photo = models.ImageField("Registration Front Photo", upload_to="images/registrations/")
+    back_regis_photo = models.ImageField("Registration back Photo", upload_to="images/registrations/")
     motorizado = models.ForeignKey(Motorizado, on_delete=models.CASCADE)
-
+    
 class Client(models.Model):
     id_number = models.CharField("id number of Client",max_length=10)
     name = models.CharField("Client name", max_length=50)
@@ -109,7 +123,7 @@ class Order(models.Model):
     destiny_loc = models.ForeignKey(Location,  on_delete=models.SET_NULL,null=True)
     local = models.ForeignKey(Local, on_delete=models.SET_NULL,null=True)
 
-class Order_Comments(models.Model):
+class OrderComments(models.Model):
     comment = models.TextField("Comments about the delivery of the order")
     grade = models.FloatField("Delivery grading")
     idOrder = models.ForeignKey(Order, on_delete=models.CASCADE)
