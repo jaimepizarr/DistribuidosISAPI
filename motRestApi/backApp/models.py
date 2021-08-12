@@ -22,7 +22,8 @@ class User(AbstractUser):
 
 
 
-class Motorizado(User):
+class Motorizado(models.Model):
+    user_id=models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True,related_name='motorizado')
     isOnline = models.BooleanField("",default=False)
     id_front_photo = models.ImageField("Front photo of id", upload_to="images/ids/")
     id_back_photo = models.ImageField("Back photo of id", upload_to="images/ids/")

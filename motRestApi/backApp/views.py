@@ -12,7 +12,6 @@ from rest_framework.parsers import MultiPartParser, FormParser
 class UserSignUp(APIView):
     def post(self,request,format=None):
         parser_classes= [MultiPartParser, FormParser]
-        print(request.data)
         location = LocationSerializer(data = request.data)
         location.is_valid(raise_exception=True)
         location.save()
@@ -21,7 +20,6 @@ class UserSignUp(APIView):
         user = UserSerializer(data=request.data)
         user.is_valid(raise_exception=True)
         user.save()
-        print(user.data)
         return Response(status=status.HTTP_200_OK, data=user.data)
 
 
@@ -31,7 +29,7 @@ class MotorizadoSignUp(APIView):
         motorizado = MotSerializer(data = request.data)
         motorizado.is_valid(raise_exception=True)
         motorizado.save()
-        id_mot = motorizado.data.get("id")
+        id_mot = motorizado.data.get("user_id")
         request.data.setdefault("motorizado",id_mot)
         vehicle = VehicleSerializer(data=request.data)
         vehicle.is_valid(raise_exception=True)

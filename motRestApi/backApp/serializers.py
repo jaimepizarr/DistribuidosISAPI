@@ -23,7 +23,7 @@ class LocationSerializer(ModelSerializer):
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
-        fields = ["user_ptr_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo"]
 
 class VehicleSerializer(ModelSerializer):
     class Meta:
