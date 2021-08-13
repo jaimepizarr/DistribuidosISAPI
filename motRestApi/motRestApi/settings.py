@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-+wn)d6=$@)k=#(2nz00@06cdw07i8l7@)wuhdvao)%gz$%rx78
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'despachomotorizado.pythonanywhere.com'
+    'despachomotorizado.pythonanywhere.com',
+    '127.0.0.1',
+    'localhost'
 ]
 
 
@@ -39,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'corsheaders',
     'rest_framework',
     'drf_yasg',
@@ -95,7 +98,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'despachoMotorizado',
+#         'USER':'root',
+#         'PASSWORD':'',
+#         'HOST':'localhost',
+#         'PORT':'3306'
+#     },
+#     'sqlite': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

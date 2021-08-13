@@ -5,7 +5,7 @@ from backApp.models import Location, User, Motorizado, Vehicle
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["id","username","email","password","number_id","gender","profile_pic","is_operador","home_loc"]
+        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc"]
 
     def create(self, validated_data):
         password = validated_data.pop('password',None)

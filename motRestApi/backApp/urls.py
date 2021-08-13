@@ -7,4 +7,5 @@ urlpatterns = [
     path('motorizado/register',MotorizadoSignUp.as_view()),
     path('user/login',TokenObtainPairView.as_view()),
     path('user/refresh',TokenRefreshView.as_view()),
+
 ]
