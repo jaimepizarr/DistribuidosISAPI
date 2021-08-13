@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-+wn)d6=$@)k=#(2nz00@06cdw07i8l7@)wuhdvao)%gz$%rx78
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'despachomotorizado.pythonanywhere.com'
+]
 
 
 # Application definition
@@ -82,10 +84,10 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'despachoMotorizado',
-        'USER':'root',
-        'PASSWORD':'',
-        'HOST':'localhost',
+        'NAME': 'despachomotoriza$default',
+        'USER':'despachomotoriza',
+        'PASSWORD':'DBd3sp@ch0',
+        'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306'
     },
     'sqlite': {
@@ -118,7 +120,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 #     "http://localhost:3060",
 #     "http://localhost:3200",
 #     "http://localhost:3100",
-    
+
 # ]
 
 
