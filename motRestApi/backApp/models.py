@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,AbstractUser
 from django.db.models.base import Model
 from django.db.models.fields import DateTimeField
+from rest_framework import permissions
 # Create your models here.
 
 class Location(models.Model):

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from backApp.models import User,Motorizado, Vehicle
 from backApp.serializers import LocationSerializer, UserSerializer, MotSerializer, VehicleSerializer
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework import permissions
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -22,8 +22,12 @@ class UserSignUp(APIView):
         user.save()
         return Response(status=status.HTTP_200_OK, data=user.data)
 
+    
 
-class MotorizadoSignUp(APIView):
+    
+
+
+class MotorizadoView(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request):
         motorizado = MotSerializer(data = request.data)
@@ -35,6 +39,16 @@ class MotorizadoSignUp(APIView):
         vehicle.is_valid(raise_exception=True)
         vehicle.save()
         return Response(status = status.HTTP_200_OK, data=motorizado.data)
+
+    def patch(self, request, id):
+        motorizado = Motorizado.objects.get(user_id=id)
+
+        serializer = MotSerializer(motorizado, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK,data=serializer.data)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     
 
 
