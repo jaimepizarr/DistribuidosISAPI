@@ -166,10 +166,10 @@ class Vehicle(models.Model):
         "Registration Front Photo", upload_to="images/registrations/")
     back_regis_photo = models.ImageField(
         "Registration back Photo", upload_to="images/registrations/")
-    veh_model = models.OneToOneField(ModelsVehicle, on_delete=models.CASCADE)
+    veh_model = models.ForeignKey(ModelsVehicle, on_delete=models.CASCADE)
     motorizado = models.ForeignKey(Motorizado, on_delete=models.CASCADE)
-    color = models.OneToOneField(ColorVehicle, on_delete=models.CASCADE)
-    type_vehicle = models.OneToOneField(TypeVehicle, on_delete=models.CASCADE)
+    color = models.ForeignKey(ColorVehicle, on_delete=models.CASCADE)
+    type_vehicle = models.ForeignKey(TypeVehicle, on_delete=models.CASCADE)
 
 
 class Client(models.Model):
