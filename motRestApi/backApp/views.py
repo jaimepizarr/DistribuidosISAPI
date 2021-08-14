@@ -2,8 +2,8 @@ from django.forms.forms import Form
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, User,Motorizado, Vehicle
-from backApp.serializers import LocationSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer
+from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle
+from backApp.serializers import LocationSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
@@ -42,4 +42,10 @@ class MotorizadoSignUp(APIView):
 def get_colors(request):
     colors=ColorVehicle.objects.all()
     colors_serializer = ColorVehicleSerializer(colors, many=True)
-    return JsonResponse(colors_serializer.data, safe=False)     
+    return JsonResponse(colors_serializer.data, safe=False)
+
+@api_view(['GET'])
+def get_type(request):
+    type_vehicle=TypeVehicle.objects.all()
+    type_vehicle_serializer = TypeVehicleSerializer(type_vehicle, many=True)
+    return JsonResponse(type_vehicle_serializer.data, safe=False)

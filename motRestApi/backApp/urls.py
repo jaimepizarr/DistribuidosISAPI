@@ -7,6 +7,7 @@ urlpatterns = [
     path('motorizado/register',MotorizadoSignUp.as_view()),
     path('user/login',TokenObtainPairView.as_view()),
     path('user/refresh',TokenRefreshView.as_view()),
-    path('vehicle/colors', views.get_colors)
+    path('vehicle/colors', views.get_colors),
+    path('vehicle/type', views.get_type)
 
 ]
