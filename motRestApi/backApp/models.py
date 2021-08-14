@@ -119,7 +119,11 @@ class LocalKM(models.Model):
     price_min = models.FloatField("Min price to charge")
 
 
+class ColorVehicle(models.Model):
+    color = models.CharField("Color of car", max_length=15)
 
+class TypeVehicle(models.Model):
+    type_vehicle = models.CharField("Type of vehicle", max_length=15)
 class Vehicle(models.Model):
     veh_model = models.CharField("Model of Vehicle",max_length=30)
     year = models.IntegerField("Year of bought")
@@ -133,7 +137,11 @@ class Vehicle(models.Model):
     front_regis_photo = models.ImageField("Registration Front Photo", upload_to="images/registrations/")
     back_regis_photo = models.ImageField("Registration back Photo", upload_to="images/registrations/")
     motorizado = models.ForeignKey(Motorizado, on_delete=models.CASCADE)
-    
+    color=models.ForeignKey(ColorVehicle, on_delete=models.CASCADE)
+    type_vehicle=models.ForeignKey(TypeVehicle, on_delete=models.CASCADE)
+
+
+
 class Client(models.Model):
     id_number = models.CharField("id number of Client",max_length=10)
     name = models.CharField("Client name", max_length=50)
