@@ -1,6 +1,6 @@
 from django.db import models
 from rest_framework.serializers import ModelSerializer
-from backApp.models import ColorVehicle, Location, TypeVehicle, User, Motorizado, Vehicle
+from backApp.models import ColorVehicle, Location, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -24,6 +24,10 @@ class TypeVehicleSerializer(ModelSerializer):
         model = TypeVehicle
         fields = ["id","type_vehicle"]
 
+class ModelsVehicleSerializer(ModelSerializer):
+    class Meta:
+        model = ModelsVehicle
+        fields = ["id","model","type_vehicle"]
 class LocationSerializer(ModelSerializer):
     class Meta:
         model = Location

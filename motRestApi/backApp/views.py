@@ -2,8 +2,8 @@ from django.forms.forms import Form
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle
-from backApp.serializers import LocationSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer
+from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle
+from backApp.serializers import LocationSerializer, ModelsVehicleSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
@@ -49,3 +49,13 @@ def get_type(request):
     type_vehicle=TypeVehicle.objects.all()
     type_vehicle_serializer = TypeVehicleSerializer(type_vehicle, many=True)
     return JsonResponse(type_vehicle_serializer.data, safe=False)
+
+@api_view(['GET'])
+def get_models(request):
+    model_vehicle=ModelsVehicle.objects.all()
+    type_vehicle=request.query_params.get('type_vehicle')
+    if type_vehicle is not None:
+        model_vehicle=model_vehicle.filter(type_vehicle=type_vehicle)
+        
+    model_vehicle_serializer = ModelsVehicleSerializer(model_vehicle, many=True)
+    return JsonResponse(model_vehicle_serializer.data, safe=False)
