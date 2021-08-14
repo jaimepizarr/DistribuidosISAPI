@@ -56,6 +56,6 @@ def get_models(request):
     type_vehicle=request.query_params.get('type_vehicle')
     if type_vehicle is not None:
         model_vehicle=model_vehicle.filter(type_vehicle=type_vehicle)
-        
+
     model_vehicle_serializer = ModelsVehicleSerializer(model_vehicle, many=True)
     return JsonResponse(model_vehicle_serializer.data, safe=False)
