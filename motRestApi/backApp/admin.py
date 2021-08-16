@@ -6,5 +6,6 @@ from backApp.models import User
 class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None,{"fields":("is_operador","is_motorizado")}),
+        (None, {'fields': ('email', 'password')}),
         )
-    
+    ordering = ('email',)

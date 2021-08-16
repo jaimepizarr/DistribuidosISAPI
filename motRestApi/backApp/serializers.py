@@ -1,11 +1,11 @@
 from django.db import models
 from rest_framework.serializers import ModelSerializer
-from backApp.models import Location, User, Motorizado, Vehicle
+from backApp.models import ColorVehicle, Location, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["id","username","email","password","number_id","gender","profile_pic","is_operador","home_loc"]
+        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc"]
 
     def create(self, validated_data):
         password = validated_data.pop('password',None)
@@ -14,7 +14,20 @@ class UserSerializer(ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+class ColorVehicleSerializer(ModelSerializer):
+    class Meta:
+        model = ColorVehicle
+        fields = ["id","color"]
 
+class TypeVehicleSerializer(ModelSerializer):
+    class Meta:
+        model = TypeVehicle
+        fields = ["id","type_vehicle"]
+
+class ModelsVehicleSerializer(ModelSerializer):
+    class Meta:
+        model = ModelsVehicle
+        fields = ["id","model","type_vehicle"]
 class LocationSerializer(ModelSerializer):
     class Meta:
         model = Location
