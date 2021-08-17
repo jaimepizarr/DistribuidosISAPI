@@ -5,7 +5,7 @@ from backApp.models import ColorVehicle, Location, TypeVehicle, User, Motorizado
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc"]
+        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc","is_staff"]
 
     def create(self, validated_data):
         password = validated_data.pop('password',None)
@@ -36,7 +36,7 @@ class LocationSerializer(ModelSerializer):
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline"]
 
 class VehicleSerializer(ModelSerializer):
     class Meta:
