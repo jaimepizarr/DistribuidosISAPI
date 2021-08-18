@@ -14,6 +14,7 @@ class UserSerializer(ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
 class ColorVehicleSerializer(ModelSerializer):
     class Meta:
         model = ColorVehicle
