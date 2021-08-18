@@ -69,7 +69,8 @@ class User(AbstractUser):
 
 class Motorizado(models.Model):
     user_id = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True, related_name='motorizado')
+        User, on_delete=models.CASCADE, primary_key=True)
+
     isOnline = models.BooleanField("", default=False)
     id_front_photo = models.ImageField(
         "Front photo of id", upload_to="images/ids/")
@@ -79,6 +80,7 @@ class Motorizado(models.Model):
         "Front license photo", upload_to="images/licenses/")
     license_back_photo = models.ImageField(
         "Back license photo", upload_to="images/licenses/")
+    
     #admin = models.ForeignKey(User,on_delete=models.CASCADE, related_name="Admin")
 
 
