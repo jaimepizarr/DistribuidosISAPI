@@ -1,14 +1,11 @@
 from datetime import datetime, timedelta
 import time
-from typing import runtime_checkable
 from django.conf import settings
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, BaseUserManager
 from rest_framework import permissions
 from django.utils.translation import ugettext_lazy as _
-from rest_framework.authentication import TokenAuthentication
-from rest_framework_simplejwt.authentication import JWTAuthentication, JWTTokenUserAuthentication
 import jwt
 
 # Create your models here.
@@ -76,7 +73,8 @@ class User(AbstractUser):
 
 class Motorizado(models.Model):
     user_id = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True, related_name='motorizado')
+        User, on_delete=models.CASCADE, primary_key=True)
+
     isOnline = models.BooleanField("", default=False)
     id_front_photo = models.ImageField(
         "Front photo of id", upload_to="images/ids/")
@@ -86,6 +84,7 @@ class Motorizado(models.Model):
         "Front license photo", upload_to="images/licenses/")
     license_back_photo = models.ImageField(
         "Back license photo", upload_to="images/licenses/")
+    
     #admin = models.ForeignKey(User,on_delete=models.CASCADE, related_name="Admin")
 
 
@@ -148,6 +147,18 @@ class Local(models.Model):
     def set_password(self,raw_password):
         self.password = make_password(raw_password)
         self._password = raw_password
+
+    def check_password(self, raw_password):
+        """
+        Return a boolean of whether the raw_password was correct. Handles
+        hashing formats behind the scenes.
+        """
+        def setter(raw_password):
+            self.set_password(raw_password)
+            # Password hash upgrades shouldn't be considered password changes.
+            self._password = None
+            self.save(update_fields=["password"])
+        return check_password(raw_password, self.password, setter)
 
 
 class LocalSector(models.Model):

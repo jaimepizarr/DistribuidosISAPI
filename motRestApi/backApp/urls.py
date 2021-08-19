@@ -12,5 +12,7 @@ urlpatterns = [
     path('user/refresh',TokenRefreshView.as_view()),
     path('vehicle/colors', views.get_colors),
     path('vehicle/type', views.get_type),
-    path('vehicle/models', views.get_models)
+    path('vehicle/models', views.get_models),
+    path('motorizado/all', views.get_motorizados),
+    path('motorizado/update', views.update_motorizado),
 ]

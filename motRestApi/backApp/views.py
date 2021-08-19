@@ -1,7 +1,7 @@
 from rest_framework_simplejwt import authentication
 from backApp.permissions import OperadorAuthenticated
 from django.forms.forms import Form
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle
@@ -11,6 +11,8 @@ from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
+from django.core import serializers
+import json
 
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
@@ -73,3 +75,20 @@ def get_models(request):
 
     model_vehicle_serializer = ModelsVehicleSerializer(model_vehicle, many=True)
     return JsonResponse(model_vehicle_serializer.data, safe=False)
+
+@api_view(['GET'])
+def get_motorizados(request):
+    motorizados=Motorizado.objects.all()
+    qs = MotSerializer.setup_eager_loading(motorizados)
+    motorizados_serializer=MotSerializer(qs, many=True)
+    return JsonResponse(motorizados_serializer.data, safe=False)
+
+@api_view(['PUT'])
+def update_motorizado(request):
+    motorizado = User.objects.filter(id=request.data['id']).first()
+    serializer = UserSerializer(motorizado, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_200_OK,data=serializer.data)
+
+    return Response(status=status.HTTP_400_BAD_REQUEST)    
