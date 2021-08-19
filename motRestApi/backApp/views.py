@@ -1,3 +1,4 @@
+from rest_framework_simplejwt import authentication
 from backApp.permissions import OperadorAuthenticated
 from django.forms.forms import Form
 from django.http.response import JsonResponse
@@ -10,7 +11,6 @@ from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
-
 
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
@@ -25,9 +25,6 @@ class UserSignUp(APIView):
         user.save()
         return Response(status=status.HTTP_200_OK, data=user.data)
 
-    
-
-    
 
 
 class MotorizadoView(APIView):

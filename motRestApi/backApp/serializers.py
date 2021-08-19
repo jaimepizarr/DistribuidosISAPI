@@ -1,6 +1,7 @@
 from django.db import models
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from backApp.models import ColorVehicle, Location, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
+from backApp.models import ColorVehicle, Local, Location, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -43,3 +44,28 @@ class VehicleSerializer(ModelSerializer):
     class Meta:
         model = Vehicle
         fields = "__all__"
+
+class LocalRegistrationSerializer(ModelSerializer):
+    #Ensuring passwords are at least 8 characters long and at most 128 characeters,
+    #and can't be read by the client (Local User)
+    password = serializers.CharField(
+        max_length=128,
+        min_length = 8,
+        write_only = True
+    )
+
+    #The token should not be able to be sent with a registration request.
+    #Using read_only true will handle that for us.
+    token = serializers.CharField(max_length=255, read_only=True)
+
+    class Meta:
+        model = Local
+
+        fields = ["ruc","password","location_id","name","email","logo_img","admin"]
+
+    def create(self, validated_data):
+        return Local.objects.create_local(**validated_data)
+
+class LocalLoginSerializer(ModelSerializer):
+    ruc = serializers.CharField(max_length=13)
+    
