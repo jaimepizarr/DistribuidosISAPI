@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import MotorizadoView, UserSignUp
+from .views import LocalLoginView, LocalRegistrationView, MotorizadoView, UserSignUp
 
 from .views import UserSignUp, get_models
 from backApp import views
@@ -15,4 +15,6 @@ urlpatterns = [
     path('vehicle/models', views.get_models),
     path('motorizado/all', views.get_motorizados),
     path('motorizado/update', views.update_motorizado),
+    path('local',LocalRegistrationView.as_view()),
+    path('local/login',LocalLoginView.as_view())
 ]
