@@ -5,7 +5,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order
-from backApp.serializers import LocationSerializer, ModelsVehicleSerializer, OrderSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer
+from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -27,7 +27,33 @@ class UserSignUp(APIView):
         user.save()
         return Response(status=status.HTTP_200_OK, data=user.data)
 
+class LocalRegistrationView(APIView):
+    parser_classes= [MultiPartParser, FormParser]
 
+    def post(self,request,format=None):
+        
+        location = LocationSerializer(data = request.data)
+        location.is_valid(raise_exception=True)
+        location.save()
+        id_location = location.data.get("id")
+        
+
+        request.data.setdefault("location_id",id_location)
+        local = LocalRegistrationSerializer(data = request.data)
+        local.is_valid(raise_exception=True)
+        
+        local.save()
+
+        return Response(data=local.data, status=status.HTTP_201_CREATED)
+
+
+class LocalLoginView(APIView):
+
+    def post(self,request):
+        local = LocalLoginSerializer(data= request.data)
+        local.is_valid(raise_exception=True)
+
+        return Response(local.data,status=status.HTTP_200_OK)
 
 class MotorizadoView(APIView):
     parser_classes= [MultiPartParser, FormParser]

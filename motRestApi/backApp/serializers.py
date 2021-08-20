@@ -81,12 +81,12 @@ class LocalRegistrationSerializer(ModelSerializer):
     class Meta:
         model = Local
 
-        fields = ["ruc","password","location_id","name","email","logo_img","admin"]
+        fields = ["ruc","password","location_id","name","email","logo_img","token","admin"]
 
     def create(self, validated_data):
         return Local.objects.create_local(**validated_data)
 
-class LocalLoginSerializer(ModelSerializer):
+class LocalLoginSerializer(Serializer):
     ruc = serializers.CharField(max_length=13)
     password = serializers.CharField(max_length=255, write_only=True)
     token = serializers.CharField(max_length=255, read_only = True)

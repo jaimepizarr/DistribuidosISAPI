@@ -116,10 +116,10 @@ class Sector(models.Model):
     map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
 
 class LocalManager(models.Manager):
-    def create_local(self,ruc,password,name,email,logo_img,location_id):
+    def create_local(self,ruc,password,name,email,logo_img,location_id,admin):
         if ruc is None or password is None:
             raise TypeError("The id and password of the local must be included.")
-        local = Local(ruc = ruc, email = email, name = name, logo_img = logo_img, location_id = location_id)
+        local = Local(ruc = ruc, email = email, name = name, logo_img = logo_img, location_id = location_id, admin=admin)
         local.set_password(password)
         local.save()
         return local
@@ -135,14 +135,17 @@ class Local(models.Model):
     reg_date = models.DateField(auto_now_add=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
     
+    objects = LocalManager()
+
     @property
     def token(self):
         days = 15
         dt = datetime.now() + timedelta(days=days)
-        jwt.encode({
+        token= jwt.encode({
             'ruc':self.ruc,
             'exp':int(time.mktime(dt.timetuple()))
         },settings.SECRET_KEY,algorithm="HS256")
+        return token
     
     def set_password(self,raw_password):
         self.password = make_password(raw_password)
