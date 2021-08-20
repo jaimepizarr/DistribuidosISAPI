@@ -15,4 +15,5 @@ urlpatterns = [
     path('vehicle/models', views.get_models),
     path('motorizado/all', views.get_motorizados),
     path('motorizado/update', views.update_motorizado),
+    path('order/all', views.get_orders),
 ]

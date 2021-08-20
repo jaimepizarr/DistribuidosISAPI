@@ -102,3 +102,24 @@ class LocalLoginSerializer(ModelSerializer):
             "token":local.token
         }
 
+class LocalSerializer(ModelSerializer):
+    class Meta:
+        model = Local
+        fields = ["ruc","name","email","logo_img","location_id"]
+
+class OrderSerializer(ModelSerializer):
+    local=LocalSerializer(many=False,read_only=True)
+    destiny_loc=LocalSerializer(many=False,read_only=True)
+    motorizado=MotSerializer(many=False,read_only=True)
+
+    
+    # select_related_fields = ('user_id',)
+    @classmethod
+    def setup_eager_loading(cls, queryset):
+        """ Perform necessary eager loading of data. """
+        print("INICIA")
+        queryset=queryset.select_related('local', 'destiny_loc','motorizado')
+        return queryset
+    class Meta:
+        model = Local
+        fields = "__all__"
