@@ -16,5 +16,6 @@ urlpatterns = [
     path('motorizado/all', views.get_motorizados),
     path('motorizado/update', views.update_motorizado),
     path('local',LocalRegistrationView.as_view()),
-    path('local/login',LocalLoginView.as_view())
+    path('local/login',LocalLoginView.as_view()),
+    path('order/all', views.get_orders),
 ]
