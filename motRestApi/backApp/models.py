@@ -240,6 +240,7 @@ class Order(models.Model):
     details = models.CharField("Details of the order", max_length=100)
     price = models.FloatField("Order price")
     delivery_price = models.FloatField("Delivery price")
+    state=models.PositiveSmallIntegerField("State of the order",null=True)
     start_time = models.DateTimeField(
         "Date and hour that the order is received by us", auto_now_add=True)
     mot_assigned_time = models.DateTimeField(

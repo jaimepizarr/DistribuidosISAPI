@@ -6,7 +6,7 @@ from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
 from rest_framework.serializers import ModelSerializer
-from backApp.models import ColorVehicle, Local, Location, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
+from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
 
 
 class ColorVehicleSerializer(ModelSerializer):
@@ -28,9 +28,11 @@ class LocationSerializer(ModelSerializer):
         model = Location
         fields = ["id","longitude","latitude","reference"]
 class UserSerializer(ModelSerializer):
+    home_loc=LocationSerializer(many=False,read_only=True)
     class Meta:
         model = User
         fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc","is_staff","is_motorizado"]
+
 
     def create(self, validated_data):
         password = validated_data.pop('password',None)
@@ -108,8 +110,8 @@ class LocalSerializer(ModelSerializer):
         fields = ["ruc","name","email","logo_img","location_id"]
 
 class OrderSerializer(ModelSerializer):
-    local=LocalSerializer(many=False,read_only=True)
-    destiny_loc=LocalSerializer(many=False,read_only=True)
+    ruc=LocalSerializer(many=False,read_only=True)
+    destiny_loc=LocationSerializer(many=False,read_only=True)
     motorizado=MotSerializer(many=False,read_only=True)
 
     
@@ -119,7 +121,8 @@ class OrderSerializer(ModelSerializer):
         """ Perform necessary eager loading of data. """
         print("INICIA")
         queryset=queryset.select_related('local', 'destiny_loc','motorizado')
+        print("termina")
         return queryset
     class Meta:
-        model = Local
+        model = Order
         fields = "__all__"
