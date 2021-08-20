@@ -6,7 +6,7 @@ from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
 from rest_framework.serializers import ModelSerializer, Serializer
-from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado, Vehicle, ModelsVehicle
+from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle
 
 
 class ColorVehicleSerializer(ModelSerializer):
@@ -31,7 +31,8 @@ class UserSerializer(ModelSerializer):
     home_loc=LocationSerializer(many=False,read_only=True)
     class Meta:
         model = User
-        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc","is_staff","is_motorizado"]
+        # fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc","is_staff","is_motorizado"]
+        fields="__all__"
 
 
     def create(self, validated_data):
@@ -108,17 +109,26 @@ class LocalSerializer(ModelSerializer):
         model = Local
         fields = ["ruc","name","email","logo_img","location_id"]
 
+class ClienteSerializer(ModelSerializer):
+    class Meta:
+        model = Client
+        fields = "__all__"
+
+class PaymentSerializer(ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = "__all__"
 class OrderSerializer(ModelSerializer):
-    ruc=LocalSerializer(many=False,read_only=True)
+    local=LocalSerializer(many=False,read_only=True)
     destiny_loc=LocationSerializer(many=False,read_only=True)
     motorizado=MotSerializer(many=False,read_only=True)
-
-
+    client=ClienteSerializer(many=False,read_only=True)
+    payment=PaymentSerializer(many=False,read_only=True)
     # select_related_fields = ('user_id',)
     @classmethod
     def setup_eager_loading(cls, queryset):
         """ Perform necessary eager loading of data. """
-        queryset=queryset.select_related('local', 'destiny_loc','motorizado')
+        queryset=queryset.select_related('local', 'destiny_loc','motorizado','client','payment')
         return queryset
     class Meta:
         model = Order

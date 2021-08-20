@@ -254,6 +254,7 @@ class Order(models.Model):
         "Arrival Estimated Time", auto_now=False, auto_now_add=False)
     real_arriv_time = models.DateTimeField(
         "Real arrival time", auto_now=False, auto_now_add=False)
+    is_paid = models.BooleanField("Is paid", default=False)
     motorizado = models.ForeignKey(
         Motorizado, on_delete=models.SET_NULL, null=True, related_name="OrderMotorizado")
     operador = models.ForeignKey(
@@ -262,6 +263,7 @@ class Order(models.Model):
     destiny_loc = models.ForeignKey(
         Location,  on_delete=models.SET_NULL, null=True)
     local = models.ForeignKey(Local, on_delete=models.SET_NULL, null=True)
+    payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True)
 
 
 class OrderComments(models.Model):
