@@ -1,8 +1,12 @@
+from datetime import datetime, timedelta
+import time
+from django.conf import settings
+from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, BaseUserManager
 from rest_framework import permissions
 from django.utils.translation import ugettext_lazy as _
-
+import jwt
 
 # Create your models here.
 
@@ -111,9 +115,18 @@ class Sector(models.Model):
     limits = models.TextField("Coordinates defining the limits of this sector")
     map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
 
+class LocalManager(models.Manager):
+    def create_local(self,ruc,password,name,email,logo_img,location_id,admin):
+        if ruc is None or password is None:
+            raise TypeError("The id and password of the local must be included.")
+        local = Local(ruc = ruc, email = email, name = name, logo_img = logo_img, location_id = location_id, admin=admin)
+        local.set_password(password)
+        local.save()
+        return local
 
 class Local(models.Model):
     ruc = models.CharField("Local RUC", max_length=15, primary_key=True)
+    password = models.CharField(_("Local Password"),max_length=128)
     location_id = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     name = models.CharField("Local name", max_length=20)
     email = models.EmailField("Local email", max_length=254)
@@ -121,6 +134,34 @@ class Local(models.Model):
         "Logo image", upload_to="images/Locals/logos", null=True, blank=True)
     reg_date = models.DateField(auto_now_add=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    objects = LocalManager()
+
+    @property
+    def token(self):
+        days = 15
+        dt = datetime.now() + timedelta(days=days)
+        token= jwt.encode({
+            'ruc':self.ruc,
+            'exp':int(time.mktime(dt.timetuple()))
+        },settings.SECRET_KEY,algorithm="HS256")
+        return token
+    
+    def set_password(self,raw_password):
+        self.password = make_password(raw_password)
+        self._password = raw_password
+
+    def check_password(self, raw_password):
+        """
+        Return a boolean of whether the raw_password was correct. Handles
+        hashing formats behind the scenes.
+        """
+        def setter(raw_password):
+            self.set_password(raw_password)
+            # Password hash upgrades shouldn't be considered password changes.
+            self._password = None
+            self.save(update_fields=["password"])
+        return check_password(raw_password, self.password, setter)
 
 
 class LocalSector(models.Model):
@@ -202,6 +243,7 @@ class Order(models.Model):
     details = models.CharField("Details of the order", max_length=100)
     price = models.FloatField("Order price")
     delivery_price = models.FloatField("Delivery price")
+    state=models.PositiveSmallIntegerField("State of the order",null=True)
     start_time = models.DateTimeField(
         "Date and hour that the order is received by us", auto_now_add=True)
     mot_assigned_time = models.DateTimeField(

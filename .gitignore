@@ -1,3 +1,8 @@
 /motRestApi/.python-version
 /motRestApi/motRestApi/__pycache__
+<<<<<<< HEAD
 /motRestApi/backApp/__pycache_
+=======
+/motRestApi/backApp/__pycache__
+/motRestApi/backApp/migrations
+>>>>>>> 92cdea4c1591670392df270731ab49290a98d683
