@@ -1,17 +1,20 @@
+import rest_framework
 from rest_framework_simplejwt import authentication
 from backApp.permissions import OperadorAuthenticated
 from django.forms.forms import Form
 from django.http.response import HttpResponse, JsonResponse
+from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order
-from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer
+from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
 from django.core import serializers
+from rest_framework import viewsets
 import json
 
 class UserSignUp(APIView):
@@ -31,15 +34,15 @@ class LocalRegistrationView(APIView):
     parser_classes= [MultiPartParser, FormParser]
 
     def post(self,request,format=None):
-        
-        location = LocationSerializer(data = request.data)
+        req = QueryDict.copy(request.POST)
+        location = LocationSerializer(data = req)
         location.is_valid(raise_exception=True)
         location.save()
         id_location = location.data.get("id")
         
 
-        request.data.setdefault("location_id",id_location)
-        local = LocalRegistrationSerializer(data = request.data)
+        req.data.setdefault("location_id",id_location)
+        local = LocalRegistrationSerializer(data = req)
         local.is_valid(raise_exception=True)
         
         local.save()
@@ -67,6 +70,11 @@ class MotorizadoView(APIView):
         vehicle.is_valid(raise_exception=True)
         vehicle.save()
         return Response(status = status.HTTP_200_OK, data=motorizado.data)
+
+
+class MotorizadoUserView(viewsets.ModelViewSet):
+    queryset = Motorizado.objects.all()
+    serializer_class = MotUserSerializer
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
@@ -104,10 +112,12 @@ def get_models(request):
 
 @api_view(['GET'])
 def get_motorizados(request):
-    motorizados=Motorizado.objects.all()
-    qs = MotSerializer.setup_eager_loading(motorizados)
-    motorizados_serializer=MotSerializer(qs, many=True)
-    return JsonResponse(motorizados_serializer.data, safe=False)
+    # motorizados=Motorizado.objects.all() 
+    # qs = MotSerializer.setup_eager_loading(motorizados)
+    # motorizados_serializer=MotSerializer(qs, many=True)
+    qs = Motorizado.objects.all().select_related("user_id")
+    motorizados_serializer=MotSerializer(qs)
+    return Response(data = motorizados_serializer.data, status = status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def update_motorizado(request):

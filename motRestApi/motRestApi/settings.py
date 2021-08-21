@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'drf_yasg',
-    'backApp'
+    "backApp"
 ]
 
 MIDDLEWARE = [
@@ -107,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'despachoMotorizado',
         'USER':'root',
-        'PASSWORD':'',
+        'PASSWORD':'1803mechilotte',
         'HOST':'localhost',
         'PORT':'3306'
     },
