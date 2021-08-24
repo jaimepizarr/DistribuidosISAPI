@@ -1,3 +1,4 @@
+from typing import Dict
 import rest_framework
 from rest_framework_simplejwt import authentication
 from backApp.permissions import OperadorAuthenticated
@@ -6,8 +7,8 @@ from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order
-from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer
+from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
+from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -35,13 +36,13 @@ class LocalRegistrationView(APIView):
 
     def post(self,request,format=None):
         req = QueryDict.copy(request.POST)
+        req["logo_img"] = request.data.get("logo_img")
         location = LocationSerializer(data = req)
         location.is_valid(raise_exception=True)
         location.save()
-        id_location = location.data.get("id")
-        
+        id_location = location.data.get("id")        
 
-        req.data.setdefault("location_id",id_location)
+        req.setdefault("location_id",id_location)
         local = LocalRegistrationSerializer(data = req)
         local.is_valid(raise_exception=True)
         
@@ -75,6 +76,10 @@ class MotorizadoView(APIView):
 class MotorizadoUserView(viewsets.ModelViewSet):
     queryset = Motorizado.objects.all()
     serializer_class = MotUserSerializer
+
+class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderAllSerializer
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
@@ -132,7 +137,23 @@ def update_motorizado(request):
 @api_view(['GET'])
 def get_orders(request):
     orders=Order.objects.all()
-    qs = OrderSerializer.setup_eager_loading(orders)
-    orders_serializer=OrderSerializer(qs, many=True)
+    orders_serializer=OrderAllSerializer(orders, many=True)
     return JsonResponse(orders_serializer.data, safe=False)
+
+@api_view(["POST"])
+def post_order(request):
+    req = dict.copy(request.data)
+    req_client = req.get("client")
+    client = Client.objects.get_or_create(id_number=req_client.get("id_number"),defaults=req_client)
+    req_location = req.get("destiny_loc")
+    destiny = Location.objects.get_or_create(latitude=req_location["latitude"],
+                                            longitude=req_location["longitude"],
+                                            reference=req_location["reference"],
+                                            defaults=req_location)
+    req["client"] = client[0].id
+    req["destiny_loc"] = destiny[0].id   
+    order = OrderSerializer(data = req)
+    order.is_valid(raise_exception=True)
+    order.save()
+    return Response(data=order.data)
 

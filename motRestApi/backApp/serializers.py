@@ -89,7 +89,7 @@ class LocalRegistrationSerializer(ModelSerializer):
     class Meta:
         model = Local
 
-        fields = ["ruc","password","location_id","name","email","logo_img","token","admin"]
+        fields = ["ruc","email","name","logo_img","location_id","admin","password","token"]
 
     def create(self, validated_data):
         return Local.objects.create_local(**validated_data)
@@ -126,18 +126,55 @@ class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
+# class OrderAllSerializer(ModelSerializer):
+#     local=LocalSerializer(many=False,read_only=True)
+#     destiny_loc=LocationSerializer(many=False,read_only=True)
+#     motorizado=MotSerializer(many=False,read_only=True)
+#     client=ClienteSerializer(many=False,read_only=True)
+#     payment=PaymentSerializer(many=False,read_only=True)
+#     # select_related_fields = ('user_id',)
+#     @classmethod
+#     def setup_eager_loading(cls, queryset):
+#         """ Perform necessary eager loading of data. """
+#         queryset=queryset.select_related('local', 'destiny_loc','motorizado','client','payment')
+#         return queryset
+#     class Meta:
+#         model = Order
+#         fields = "__all__"
+
+
 class OrderSerializer(ModelSerializer):
-    local=LocalSerializer(many=False,read_only=True)
-    destiny_loc=LocationSerializer(many=False,read_only=True)
-    motorizado=MotSerializer(many=False,read_only=True)
-    client=ClienteSerializer(many=False,read_only=True)
-    payment=PaymentSerializer(many=False,read_only=True)
-    # select_related_fields = ('user_id',)
-    @classmethod
-    def setup_eager_loading(cls, queryset):
-        """ Perform necessary eager loading of data. """
-        queryset=queryset.select_related('local', 'destiny_loc','motorizado','client','payment')
-        return queryset
     class Meta:
         model = Order
-        fields = "__all__"
+        fields = ["id","local","destiny_loc","motorizado","client","payment","details","price","delivery_price","state","start_time","mot_assigned_time","deliv_start_time","arriv_estimated_time","real_arriv_time","is_paid","operador"]
+    
+    # def create(self, validated_data):
+    #     print("HEy")
+    #     local_data = validated_data.pop("local")
+    #     local = Local.objects.get(ruc=local_data)
+    #     print(local)
+    #     destiny_local_data = validated_data.pop("destiny_loc")
+    #     destiny_local = Location.objects.get(pk=destiny_local_data)
+    #     motorizado_data = validated_data.pop("motorizado")
+    #     motorizado = Motorizado.objects.get(user_id = motorizado_data)
+    #     client_data = validated_data.pop("client")
+    #     client = Client.objects.get(pk=client_data)
+    #     payment_data = validated_data.pop("payment")
+    #     payment = Payment.objects.get(pk=payment_data)
+    #     order = Order.objects.create(local = local,
+    #                                 destiny_local=destiny_local,
+    #                                 motorizado=motorizado,
+    #                                 client=client,
+    #                                 payment=payment,
+    #                                 **validated_data)
+    #     return order
+
+
+class OrderAllSerializer(OrderSerializer):
+    local=LocalSerializer(many=False)
+    destiny_loc=LocationSerializer(many=False)
+    motorizado=MotSerializer(many=False)
+    client=ClienteSerializer(many=False)
+    payment=PaymentSerializer(many=False)
+    
+    

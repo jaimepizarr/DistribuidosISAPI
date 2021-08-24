@@ -215,7 +215,7 @@ class Vehicle(models.Model):
 
 
 class Client(models.Model):
-    id_number = models.CharField("id number of Client", max_length=10)
+    id_number = models.CharField("id number of Client", max_length=10, null = True)
     name = models.CharField("Client name", max_length=50)
     apellido = models.CharField("Client last name", max_length=50)
     email = models.EmailField("Client email", max_length=254, null=True)
@@ -242,18 +242,18 @@ class Payment(models.Model):
 class Order(models.Model):
     details = models.CharField("Details of the order", max_length=100)
     price = models.FloatField("Order price")
-    delivery_price = models.FloatField("Delivery price")
+    delivery_price = models.FloatField("Delivery price", null= True)
     state=models.PositiveSmallIntegerField("State of the order",null=True)
     start_time = models.DateTimeField(
-        "Date and hour that the order is received by us", auto_now_add=True)
+        "Date and hour that the order is received by us", auto_now_add=True, null=True)
     mot_assigned_time = models.DateTimeField(
-        "Time the order has been assigned to a motorizado", auto_now=False, auto_now_add=False)
+        "Time the order has been assigned to a motorizado", auto_now=False, auto_now_add=False, null=True)
     deliv_start_time = models.DateTimeField(
-        "Time the order begins its delivery")
+        "Time the order begins its delivery", auto_now=False, auto_now_add=False, null=True)
     arriv_estimated_time = models.DateTimeField(
-        "Arrival Estimated Time", auto_now=False, auto_now_add=False)
+        "Arrival Estimated Time", auto_now=False, auto_now_add=False, null=True)
     real_arriv_time = models.DateTimeField(
-        "Real arrival time", auto_now=False, auto_now_add=False)
+        "Real arrival time", auto_now=False, auto_now_add=False, null=True)
     is_paid = models.BooleanField("Is paid", default=False)
     motorizado = models.ForeignKey(
         Motorizado, on_delete=models.SET_NULL, null=True, related_name="OrderMotorizado")
@@ -262,7 +262,7 @@ class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
     destiny_loc = models.ForeignKey(
         Location,  on_delete=models.SET_NULL, null=True)
-    local = models.ForeignKey(Local, on_delete=models.SET_NULL, null=True)
+    local = models.ForeignKey(Local, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True)
 
 
