@@ -8,7 +8,8 @@ class OperadorAuthenticated(permissions.BasePermission):
 
 
 class LocalAuthenticated(permissions.BasePermission):
-
-    def has_permission(self, request):
-        auth = JWTLocalAuthentication.authenticate(request)
+    def has_permission(self, request,view):
+        authentication = JWTLocalAuthentication()
+        auth = authentication.authenticate(request)
+        request.data["local"]= auth[0].ruc
         return auth is not None
