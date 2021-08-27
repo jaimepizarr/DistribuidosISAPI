@@ -1,8 +1,4 @@
-from typing import Dict
-import rest_framework
-from rest_framework_simplejwt import authentication
-from backApp.permissions import OperadorAuthenticated
-from django.forms.forms import Form
+from backApp.permissions import LocalAuthenticated
 from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
@@ -10,7 +6,7 @@ from rest_framework.views import APIView
 from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
 from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
 from rest_framework.response import Response
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.decorators import api_view, permission_classes
@@ -85,7 +81,6 @@ class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
 @permission_classes([IsAuthenticated])
 def upd_mot(request, id):
     motorizado = Motorizado.objects.get(user_id=id)
-
     serializer = MotSerializer(motorizado, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
@@ -141,6 +136,7 @@ def get_orders(request):
     return JsonResponse(orders_serializer.data, safe=False)
 
 @api_view(["POST"])
+@permission_classes([LocalAuthenticated])
 def post_order(request):
     req = dict.copy(request.data)
     req_client = req.get("client")

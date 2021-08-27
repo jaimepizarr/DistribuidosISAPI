@@ -95,7 +95,7 @@ class LocalRegistrationSerializer(ModelSerializer):
         return Local.objects.create_local(**validated_data)
 
 class LocalLoginSerializer(Serializer):
-    ruc = serializers.CharField(max_length=13)
+    ruc = serializers.CharField(max_length=15)
     password = serializers.CharField(max_length=255, write_only=True)
     token = serializers.CharField(max_length=255, read_only = True)
 

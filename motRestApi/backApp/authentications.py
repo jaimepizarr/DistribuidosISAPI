@@ -37,17 +37,16 @@ class JWTLocalAuthentication(authentication.BaseAuthentication):
         if len(auth_header) == 1 or len(auth_header)>2:
                 return None
         
-        prefix = auth_header[0].decode("utf-8")
+        prefix = auth_header[0].decode("utf-8").lower()
         token = auth_header[1].decode('utf-8')
 
         if prefix!=auth_header_prefix:
             return None
-
         return self._authenticate_credentials(request,token)
 
     def _authenticate_credentials(self,request,token):
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY)
+            payload = jwt.decode(token, settings.SECRET_KEY,algorithms=["HS256"])
         except:
             msg = 'Invalid authentication. Could not decode token.'
             raise exceptions.AuthenticationFailed(msg)
