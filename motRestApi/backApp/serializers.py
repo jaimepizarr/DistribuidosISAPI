@@ -113,6 +113,7 @@ class LocalLoginSerializer(Serializer):
         }
 
 class LocalSerializer(ModelSerializer):
+    location_id = LocationSerializer(many=False)
     class Meta:
         model = Local
         fields = ["ruc","name","email","logo_img","location_id"]
