@@ -36,12 +36,12 @@ class LocalRegistrationView(APIView):
         location = LocationSerializer(data = req)
         location.is_valid(raise_exception=True)
         location.save()
-        id_location = location.data.get("id")        
+        id_location = location.data.get("id")
 
         req.setdefault("location_id",id_location)
         local = LocalRegistrationSerializer(data = req)
         local.is_valid(raise_exception=True)
-        
+
         local.save()
 
         return Response(data=local.data, status=status.HTTP_201_CREATED)
@@ -86,7 +86,7 @@ def upd_mot(request, id):
         serializer.save()
         return Response(status=status.HTTP_200_OK,data=serializer.data)
 
-    return Response(status=status.HTTP_400_BAD_REQUEST)    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def get_colors(request):
@@ -112,7 +112,7 @@ def get_models(request):
 
 @api_view(['GET'])
 def get_motorizados(request):
-    # motorizados=Motorizado.objects.all() 
+    # motorizados=Motorizado.objects.all()
     # qs = MotSerializer.setup_eager_loading(motorizados)
     # motorizados_serializer=MotSerializer(qs, many=True)
     qs = Motorizado.objects.all().select_related("user_id")
@@ -127,7 +127,7 @@ def update_motorizado(request):
         serializer.save()
         return Response(status=status.HTTP_200_OK,data=serializer.data)
 
-    return Response(status=status.HTTP_400_BAD_REQUEST)    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def get_orders(request):
@@ -147,7 +147,7 @@ def post_order(request):
                                             reference=req_location["reference"],
                                             defaults=req_location)
     req["client"] = client[0].id
-    req["destiny_loc"] = destiny[0].id   
+    req["destiny_loc"] = destiny[0].id
     order = OrderSerializer(data = req)
     order.is_valid(raise_exception=True)
     order.save()
