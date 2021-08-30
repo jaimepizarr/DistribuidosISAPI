@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import mimetypes
+
+mimetypes.add_type("text/javascript", ".js", True)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,7 +31,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'despachomotorizado.pythonanywhere.com',
     '127.0.0.1',
-    'localhost'
+    'localhost',
+    '192.168.100.248'
 ]
 
 
@@ -66,7 +70,9 @@ ROOT_URLCONF = 'motRestApi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR,'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,9 +94,9 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'despachomotorizado',
+        'NAME': 'despachoMotorizado',
         'USER':'root',
-        'PASSWORD':'asdPRT12345678',
+        'PASSWORD':'',
         'HOST':'localhost',
         # 'NAME': 'despachomotoriza$default',
         # 'USER':'despachomotoriza',
@@ -155,16 +161,15 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #STATIC_ROOT =  os.path.join(BASE_DIR,'frontend/static/')
-STATIC_URL = '/front/static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
-    os.path.join(BASE_DIR,'frontend/static/')
+    os.path.join(BASE_DIR,'frontend/static')
 )
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
