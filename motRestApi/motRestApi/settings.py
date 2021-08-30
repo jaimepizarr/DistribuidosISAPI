@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'drf_yasg',
-    "backApp"
+    "backApp",
+    "frontend"
 ]
 
 MIDDLEWARE = [
@@ -87,14 +88,14 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'despachomotorizado',
-        # 'USER':'root',
-        # 'PASSWORD':'1803mechilotte',
-        # 'HOST':'localhost',
-        'NAME': 'despachomotoriza$default',
-        'USER':'despachomotoriza',
-        'PASSWORD':'DBd3sp@ch0',
-        'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
+        'NAME': 'despachomotorizado',
+        'USER':'root',
+        'PASSWORD':'asdPRT12345678',
+        'HOST':'localhost',
+        # 'NAME': 'despachomotoriza$default',
+        # 'USER':'despachomotoriza',
+        # 'PASSWORD':'DBd3sp@ch0',
+        # 'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306'
     },
     'sqlite': {
@@ -154,13 +155,16 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATIC_ROOT =  os.path.join(BASE_DIR,'frontend/static/')
+STATIC_URL = '/front/static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static'),
+    os.path.join(BASE_DIR,'frontend/static/')
 )
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
