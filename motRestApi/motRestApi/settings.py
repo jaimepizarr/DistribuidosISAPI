@@ -94,14 +94,14 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'despachoMotorizado',
-        'USER':'root',
-        'PASSWORD':'',
-        'HOST':'localhost',
-        # 'NAME': 'despachomotoriza$default',
-        # 'USER':'despachomotoriza',
-        # 'PASSWORD':'DBd3sp@ch0',
-        # 'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
+        # 'NAME': 'despachoMotorizado',
+        # 'USER':'root',
+        # 'PASSWORD':'',
+        # 'HOST':'localhost',
+        'NAME': 'despachomotoriza$default',
+        'USER':'despachomotoriza',
+        'PASSWORD':'DBd3sp@ch0',
+        'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306'
     },
     'sqlite': {
@@ -161,7 +161,7 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #STATIC_ROOT =  os.path.join(BASE_DIR,'frontend/static/')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
