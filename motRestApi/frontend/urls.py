@@ -3,4 +3,4 @@ from django.views.generic.base import TemplateView
 from frontend.views import *
 
 urlpatterns = [
-url(r'^.*', TemplateView.as_view(template_name="home.html"), name="home")]
+url(r'^.*', TemplateView.as_view(template_name="frontend/home.html"), name="home")]
