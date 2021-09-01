@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     'despachomotorizado.pythonanywhere.com',
     '127.0.0.1',
     'localhost',
-    '192.168.100.248'
+    '192.168.100.239'
 ]
 
 
@@ -94,14 +94,14 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'despachoMotorizado',
-        # 'USER':'root',
-        # 'PASSWORD':'',
-        # 'HOST':'localhost',
-        'NAME': 'despachomotoriza$default',
-        'USER':'despachomotoriza',
-        'PASSWORD':'DBd3sp@ch0',
-        'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
+        'NAME': 'despachoMotorizado',
+        'USER':'root',
+        'PASSWORD':'',
+        'HOST':'localhost',
+        # 'NAME': 'despachomotoriza$default',
+        # 'USER':'despachomotoriza',
+        # 'PASSWORD':'DBd3sp@ch0',
+        # 'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306'
     },
     'sqlite': {
