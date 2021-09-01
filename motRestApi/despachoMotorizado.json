@@ -1,0 +1,680 @@
+[
+  {
+    "model": "backApp.location",
+    "pk": 1,
+    "fields": {
+      "latitude": -2.1664,
+      "longitude": -79.9011,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 2,
+    "fields": {
+      "latitude": -2.1664,
+      "longitude": -79.9011,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 3,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 4,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 5,
+    "fields": {
+      "latitude": -2.1664,
+      "longitude": -79.9011,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 6,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 7,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 8,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 9,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 10,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 11,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 12,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 13,
+    "fields": {
+      "latitude": -2.1664,
+      "longitude": -79.9011,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 14,
+    "fields": {
+      "latitude": -2.1664,
+      "longitude": -79.9011,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 15,
+    "fields": {
+      "latitude": -2.1664,
+      "longitude": -79.9011,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 16,
+    "fields": {
+      "latitude": -0.2143,
+      "longitude": -78.5017,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 17,
+    "fields": {
+      "latitude": -2.1567605,
+      "longitude": -79.8260538,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 18,
+    "fields": {
+      "latitude": -2.1567601,
+      "longitude": -79.826059,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 19,
+    "fields": {
+      "latitude": -0.2143,
+      "longitude": -78.5017,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 20,
+    "fields": {
+      "latitude": -2.1567617,
+      "longitude": -79.8260623,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 21,
+    "fields": {
+      "latitude": -2.1567612,
+      "longitude": -79.8260542,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 22,
+    "fields": {
+      "latitude": -2.1567622,
+      "longitude": -79.8260624,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 23,
+    "fields": {
+      "latitude": -2.1567593,
+      "longitude": -79.826063,
+      "reference": "Duran"
+    }
+  },
+  {
+    "model": "backApp.location",
+    "pk": 24,
+    "fields": {
+      "latitude": 132213.0,
+      "longitude": 2133.0,
+      "reference": "duran"
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$GUh16oYxxlim$zS0XVrzoRraTrPKtMWDjDKsKG3wdOPAgZ7Hk8HrluH4=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "dsdsdsf",
+      "last_name": "dsdsdsf",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T05:46:57.857Z",
+      "email": "caloja@espol.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$XXhYtbZJcH9y$bK7MsDP7T4d0APqcGgpJjjKFxR2JqDtZNDKEa3MTBZ8=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Carlos Andres",
+      "last_name": "Loja Guevara",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T05:51:01.949Z",
+      "email": "caloja@espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$kqWL0wVtfaOx$zDOgNpWWpBkQA3A/U1Qxz/qA/L+S37frlVIMbX86R5Y=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "dsfsd",
+      "last_name": "sdffds",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T06:13:41.899Z",
+      "email": "caloj@gmail.com",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": true,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$3y2HZrxPeBc6$kJaFtV3Wk/XBhxsZoQu9hSAFLIKVGIDbdLlkcgA0Pn0=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "ef",
+      "last_name": "dsf",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T17:49:07.454Z",
+      "email": "caloja@ekjn.com",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$bwvl1I93lshB$GYiUbD4ac1+Oj9ejHwqiLh4PAoGjlQEaRoDR6B/0bmY=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "carlos",
+      "last_name": "loja",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:27:19.832Z",
+      "email": "calojjkaa@fiec.espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$viQZNTjYvy4R$0H1Q2+RcJxR+Xm96LzMTKkoz3boxWhhW8F28Wy1vwuw=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "varlos",
+      "last_name": "loja",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:40:44.887Z",
+      "email": "calosjnaja@fiec.espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": true,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$eWUPkUhjyBkN$28V5mki95MnSJxQxtzFQ4xN9ThK2F2Y53MS4KxpwrWg=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "sdcsd",
+      "last_name": "dssd",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:46:15.085Z",
+      "email": "caloja2134@gmail.com",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$nCz5jXkiDmzL$amP9HZXpdMLso9MpJ92KVUIiujGZt/SdJSwcto1KJfs=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "cndn",
+      "last_name": "kdkdn",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:48:40.569Z",
+      "email": "calojamsns@fiec.espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 15,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$FaNOb4HHMzt6$1yQey8bjQnBxkn5jCePqs+MHNWGlaDnigXmdx7Z0HrM=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "caksj",
+      "last_name": "kdnsbs",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:54:58.835Z",
+      "email": "calojsbsa@fiec.espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 16,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$LEPtcbxlrsOB$d8NVhsJc1KgCNg6qYp9KfgGK+PrkfTy+rd8d49viAgo=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "bzbs",
+      "last_name": "nsnsb",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:56:13.750Z",
+      "email": "calnsnsnoja@fiec.espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$H6ko5ZJCaxsB$HceXbevRSHsfy9S5BRIJjFSVCY1M614WFJyWQwi1KGA=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Carls",
+      "last_name": "loja Guevara",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-14T18:58:33.406Z",
+      "email": "cansjsjsloja@espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": true,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.user",
+    "pk": 18,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$iHrj7S86U8Yp$CO0ksU8k2VTUr/KqfXdLwD//naoHbz70kPSC7vfx0SY=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Carlos Andres",
+      "last_name": "Loja Guevara",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2021-08-18T02:59:30.384Z",
+      "email": "caloja1324@espol.edu.ec",
+      "number_id": "0951690148",
+      "is_operador": false,
+      "is_motorizado": false,
+      "profile_pic": "images/profiles/2021-08-14_fVFADf4.jpeg",
+      "birth_date": null,
+      "gender": "1",
+      "home_loc": 24,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "backApp.motorizado",
+    "pk": 9,
+    "fields": {
+      "isOnline": false,
+      "id_front_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "id_back_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "license_front_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg",
+      "license_back_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg"
+    }
+  },
+  {
+    "model": "backApp.motorizado",
+    "pk": 10,
+    "fields": {
+      "isOnline": false,
+      "id_front_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "id_back_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "license_front_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg",
+      "license_back_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg"
+    }
+  },
+  {
+    "model": "backApp.motorizado",
+    "pk": 12,
+    "fields": {
+      "isOnline": false,
+      "id_front_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "id_back_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "license_front_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg",
+      "license_back_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg"
+    }
+  },
+  {
+    "model": "backApp.motorizado",
+    "pk": 17,
+    "fields": {
+      "isOnline": false,
+      "id_front_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "id_back_photo": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "license_front_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg",
+      "license_back_photo": "images/licenses/2021-08-14_3GQOCZy.jpeg"
+    }
+  },
+  {
+    "model": "backApp.local",
+    "pk": "0954785420001",
+    "fields": {
+      "password": "pbkdf2_sha256$216000$GUh16oYxxlim$zS0XVrzoRraTrPKtMWDjDKsKG3wdOPAgZ7Hk8HrluH4=",
+      "location_id": 15,
+      "name": "Delo Pizza",
+      "email": "caloja@edu.ec",
+      "logo_img": "images/ids/2021-08-14_9kuarZ6.jpeg",
+      "reg_date": "2021-08-17",
+      "admin": 12
+    }
+  },
+  { "model": "backApp.colorvehicle", "pk": 1, "fields": { "color": "rojo" } },
+  { "model": "backApp.colorvehicle", "pk": 3, "fields": { "color": "azul" } },
+  {
+    "model": "backApp.typevehicle",
+    "pk": 1,
+    "fields": { "type_vehicle": "Motocicleta" }
+  },
+  {
+    "model": "backApp.typevehicle",
+    "pk": 2,
+    "fields": { "type_vehicle": "Auto" }
+  },
+  {
+    "model": "backApp.modelsvehicle",
+    "pk": 1,
+    "fields": { "model": "Nissan", "type_vehicle": 2 }
+  },
+  {
+    "model": "backApp.modelsvehicle",
+    "pk": 2,
+    "fields": { "model": "Aveo", "type_vehicle": 2 }
+  },
+  {
+    "model": "backApp.modelsvehicle",
+    "pk": 3,
+    "fields": { "model": "Renault", "type_vehicle": 1 }
+  },
+  {
+    "model": "backApp.modelsvehicle",
+    "pk": 4,
+    "fields": { "model": "Honda", "type_vehicle": 1 }
+  },
+  {
+    "model": "backApp.modelsvehicle",
+    "pk": 5,
+    "fields": { "model": "Yamaha", "type_vehicle": 1 }
+  },
+  {
+    "model": "backApp.vehicle",
+    "pk": 1,
+    "fields": {
+      "year": 2021,
+      "plate_number": "dsa21",
+      "plate_photo": "images/plates/2021-08-14_OvgXWbi.jpeg",
+      "right_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "left_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "front_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "back_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "front_regis_photo": "images/registrations/2021-08-14_DEguPu9.jpeg",
+      "back_regis_photo": "images/registrations/2021-08-14_DEguPu9.jpeg",
+      "veh_model": 1,
+      "motorizado": 9,
+      "color": 1,
+      "type_vehicle": 2
+    }
+  },
+  {
+    "model": "backApp.vehicle",
+    "pk": 2,
+    "fields": {
+      "year": 2019,
+      "plate_number": "bxbdb",
+      "plate_photo": "images/plates/2021-08-14_OvgXWbi.jpeg",
+      "right_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "left_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "front_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "back_photo": "images/vehicles/2021-08-14_3DhJtpm.jpeg",
+      "front_regis_photo": "images/registrations/2021-08-14_DEguPu9.jpeg",
+      "back_regis_photo": "images/registrations/2021-08-14_DEguPu9.jpeg",
+      "veh_model": 1,
+      "motorizado": 17,
+      "color": 1,
+      "type_vehicle": 2
+    }
+  },
+  {
+    "model": "backApp.client",
+    "pk": 1,
+    "fields": {
+      "id_number": "0951690148",
+      "name": "Andres",
+      "apellido": "Guevara",
+      "email": "clojaguevara22@gmail.com"
+    }
+  },
+  {
+    "model": "backApp.payment",
+    "pk": 1,
+    "fields": { "payment_type": "TARJETA DE CRÉDITO" }
+  },
+  {
+    "model": "backApp.payment",
+    "pk": 2,
+    "fields": { "payment_type": "PAGO FÍSICO" }
+  },
+  {
+    "model": "backApp.order",
+    "pk": 5,
+    "fields": {
+      "details": "Pizza barata",
+      "price": 20.5,
+      "delivery_price": 3.5,
+      "state": 1,
+      "start_time": "2021-08-17T03:14:07.999Z",
+      "mot_assigned_time": "2021-08-17T03:15:07.999Z",
+      "deliv_start_time": "2021-08-17T03:17:07.999Z",
+      "arriv_estimated_time": "2021-08-17T03:50:07.999Z",
+      "real_arriv_time": "2021-08-17T03:55:07.999Z",
+      "is_paid": true,
+      "motorizado": 17,
+      "operador": 9,
+      "client": 1,
+      "destiny_loc": 1,
+      "local": "0954785420001",
+      "payment": 1
+    }
+  }
+]
