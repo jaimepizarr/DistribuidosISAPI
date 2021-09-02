@@ -1,9 +1,11 @@
+from functools import partial
+from django.db.models import query
 from backApp.permissions import LocalAuthenticated
 from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
+from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
 from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,6 +15,8 @@ from rest_framework.decorators import api_view, permission_classes
 from django.core import serializers
 from rest_framework import viewsets
 import json
+from django.conf import settings
+import requests
 
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
@@ -26,6 +30,13 @@ class UserSignUp(APIView):
         user.is_valid(raise_exception=True)
         user.save()
         return Response(status=status.HTTP_200_OK, data=user.data)
+
+    def patch(self,request,id):
+        user = User.objects.get(id = id)
+        serializer = UserSerializer(user, data = request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_200_OK, data = serializer.data)
 
 class LocalRegistrationView(APIView):
     parser_classes= [MultiPartParser, FormParser]
@@ -71,6 +82,13 @@ class MotorizadoView(APIView):
 
 class MotorizadoUserView(viewsets.ModelViewSet):
     queryset = Motorizado.objects.all()
+    serializer_class = MotUserSerializer
+
+
+class MotToAssignView(viewsets.ReadOnlyModelViewSet):
+    queryset = Motorizado.objects.filter(user_id__is_motorizado=0,
+                                        user_id__is_operador=0,
+                                        user_id__is_staff = 0).all()
     serializer_class = MotUserSerializer
 
 class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
@@ -146,6 +164,11 @@ def post_order(request):
                                             longitude=req_location["longitude"],
                                             reference=req_location["reference"],
                                             defaults=req_location)
+    # local = Local.objects.get(ruc=req.get("local"))
+    # local_location = local.location_id
+    #origin = local_location.longitude, local_location.latitude
+    #destination = destiny.longitude, destiny.latitude
+    #distance = getDistance(origin,destination)
     req["client"] = client[0].id
     req["destiny_loc"] = destiny[0].id
     order = OrderSerializer(data = req)
@@ -153,3 +176,13 @@ def post_order(request):
     order.save()
     return Response(data=order.data)
 
+
+def getDistance(origin,destination):
+    google_key = settings.GOOGLE_API_KEY
+    url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&key={}".format(origin[0],origin[1],destination[0],destination[1],google_key)
+    payload={}
+    headers = {}
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    return response.text

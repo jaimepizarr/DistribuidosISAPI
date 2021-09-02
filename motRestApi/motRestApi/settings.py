@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     'despachomotorizado.pythonanywhere.com',
     '127.0.0.1',
     'localhost',
-    '192.168.100.248'
+    '192.168.100.239'
 ]
 
 
@@ -177,3 +177,5 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "backApp.User"
+
+GOOGLE_API_KEY = "AIzaSyBHEIRG5sYxESIrlMyq664B6HT3fVw7Wxg"
