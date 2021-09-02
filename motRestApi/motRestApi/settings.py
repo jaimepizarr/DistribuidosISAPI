@@ -94,14 +94,14 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'despachoMotorizado',
-        # 'USER':'root',
-        # 'PASSWORD':'',
-        # 'HOST':'localhost',
-        'NAME': 'despachomotoriza$default',
-        'USER':'despachomotoriza',
-        'PASSWORD':'DBd3sp@ch0',
-        'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
+        'NAME': 'despachoMotorizado',
+        'USER':'root',
+        'PASSWORD':'1803mechilotte',
+        'HOST':'localhost',
+        # 'NAME': 'despachomotoriza$default',
+        # 'USER':'despachomotoriza',
+        # 'PASSWORD':'DBd3sp@ch0',
+        # 'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306'
     },
     'sqlite': {
@@ -177,3 +177,5 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "backApp.User"
+
+GOOGLE_API_KEY = "AIzaSyBHEIRG5sYxESIrlMyq664B6HT3fVw7Wxg"

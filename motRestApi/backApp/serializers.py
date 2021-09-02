@@ -2,6 +2,7 @@ from base64 import decode
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.db import models
+from django.db.models.fields import related
 from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
@@ -30,13 +31,10 @@ class LocationSerializer(ModelSerializer):
         fields = ["id","longitude","latitude","reference"]
 
 class UserSerializer(ModelSerializer):
-    home_loc=LocationSerializer(many=False,read_only=True)
     class Meta:
         model = User
-        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","home_loc","is_staff","is_motorizado","birth_date"]
-        #fields="__all__"
-
-
+        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","is_staff","is_motorizado","birth_date","home_loc"]
+    
     def create(self, validated_data):
         password = validated_data.pop('password',None)
         instance = self.Meta.model(**validated_data)
@@ -45,6 +43,9 @@ class UserSerializer(ModelSerializer):
         instance.save()
         return instance
 
+class UserRetrieveSerializer(UserSerializer):
+    home_loc=LocationSerializer(many=False,read_only = True)
+
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
@@ -52,11 +53,12 @@ class MotSerializer(ModelSerializer):
 
 
 class MotUserSerializer(ModelSerializer):
-    user_id = UserSerializer(read_only=True,many=False)
+    user_id = UserRetrieveSerializer(read_only=True,many=False)
 
     class Meta:
         model = Motorizado
         fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline"]
+    
     # # select_related_fields = ('user_id',)
     # @classmethod
     # def setup_eager_loading(cls, queryset):
@@ -127,21 +129,6 @@ class PaymentSerializer(ModelSerializer):
     class Meta:
         model = Payment
         fields = "__all__"
-# class OrderAllSerializer(ModelSerializer):
-#     local=LocalSerializer(many=False,read_only=True)
-#     destiny_loc=LocationSerializer(many=False,read_only=True)
-#     motorizado=MotSerializer(many=False,read_only=True)
-#     client=ClienteSerializer(many=False,read_only=True)
-#     payment=PaymentSerializer(many=False,read_only=True)
-#     # select_related_fields = ('user_id',)
-#     @classmethod
-#     def setup_eager_loading(cls, queryset):
-#         """ Perform necessary eager loading of data. """
-#         queryset=queryset.select_related('local', 'destiny_loc','motorizado','client','payment')
-#         return queryset
-#     class Meta:
-#         model = Order
-#         fields = "__all__"
 
 
 class OrderSerializer(ModelSerializer):
