@@ -49,7 +49,7 @@ class UserRetrieveSerializer(UserSerializer):
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy"]
 
 
 class MotUserSerializer(ModelSerializer):
@@ -57,7 +57,7 @@ class MotUserSerializer(ModelSerializer):
 
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy"]
     
     # # select_related_fields = ('user_id',)
     # @classmethod
