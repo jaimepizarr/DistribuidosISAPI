@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser, BaseUserManager
+from django.db.models.base import Model
 from rest_framework import permissions
 from django.utils.translation import ugettext_lazy as _
 import jwt
@@ -74,7 +75,7 @@ class User(AbstractUser):
 class Motorizado(models.Model):
     user_id = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True)
-
+    is_busy = models.BooleanField("",default=False)
     isOnline = models.BooleanField("", default=False)
     id_front_photo = models.ImageField(
         "Front photo of id", upload_to="images/ids/")
