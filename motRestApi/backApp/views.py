@@ -1,4 +1,7 @@
+from datetime import datetime
 from functools import partial
+import re
+from typing import Dict
 from django.db.models import query
 from backApp.permissions import LocalAuthenticated
 from django.http.response import HttpResponse, JsonResponse
@@ -164,17 +167,32 @@ def post_order(request):
                                             longitude=req_location["longitude"],
                                             reference=req_location["reference"],
                                             defaults=req_location)
+    #The following code is how the distance and duration should be gotten from google api
+
     # local = Local.objects.get(ruc=req.get("local"))
     # local_location = local.location_id
     #origin = local_location.longitude, local_location.latitude
     #destination = destiny.longitude, destiny.latitude
-    #distance = getDistance(origin,destination)
+    # distance_matrix = json.load(getDistance(origin,destination)) 
+    # distance = distance_matrix["rows"][0]["elements"][0]["distance"]
+    # duration = distance_matrix["rows"][0]["elements"][0]["duration"]
+
     req["client"] = client[0].id
     req["destiny_loc"] = destiny[0].id
     order = OrderSerializer(data = req)
     order.is_valid(raise_exception=True)
     order.save()
     return Response(data=order.data)
+
+@api_view(["PATCH"])
+def assign_order(request, id):
+    order = Order.objects.get(id = id)
+    req = request.data.copy()
+    req["mot_assigned_time"] = datetime.now()
+    serializer = OrderSerializer(order, data = req,partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status=status.HTTP_200_OK, data = serializer.data)
 
 
 def getDistance(origin,destination):
@@ -185,4 +203,4 @@ def getDistance(origin,destination):
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    return response.text
+    return response.json()
