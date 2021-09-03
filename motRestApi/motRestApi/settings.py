@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     'despachomotorizado.pythonanywhere.com',
     '127.0.0.1',
     'localhost',
-    '192.168.100.248'
+    '192.168.100.239'
 ]
 
 
@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'despachoMotorizado',
         'USER':'root',
-        'PASSWORD':'',
+        'PASSWORD':'1803mechilotte',
         'HOST':'localhost',
         # 'NAME': 'despachomotoriza$default',
         # 'USER':'despachomotoriza',
@@ -161,7 +161,7 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #STATIC_ROOT =  os.path.join(BASE_DIR,'frontend/static/')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
@@ -177,3 +177,5 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "backApp.User"
+
+GOOGLE_API_KEY = "AIzaSyBHEIRG5sYxESIrlMyq664B6HT3fVw7Wxg"
