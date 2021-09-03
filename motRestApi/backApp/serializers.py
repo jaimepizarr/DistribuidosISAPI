@@ -46,6 +46,11 @@ class UserSerializer(ModelSerializer):
 class UserRetrieveSerializer(UserSerializer):
     home_loc=LocationSerializer(many=False,read_only = True)
 
+class VehicleSerializer(ModelSerializer):
+    class Meta:
+        model = Vehicle
+        fields = "__all__"
+
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
@@ -53,11 +58,12 @@ class MotSerializer(ModelSerializer):
 
 
 class MotUserSerializer(ModelSerializer):
+    vehicles = VehicleSerializer(read_only=True,many=True)
     user_id = UserRetrieveSerializer(read_only=True,many=False)
 
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy","vehicles"]
     
     # # select_related_fields = ('user_id',)
     # @classmethod
@@ -68,12 +74,7 @@ class MotUserSerializer(ModelSerializer):
     #     queryset=queryset.filter(user_id__is_motorizado=False)
     #     return queryset
 
-    
 
-class VehicleSerializer(ModelSerializer):
-    class Meta:
-        model = Vehicle
-        fields = "__all__"
 
 class LocalRegistrationSerializer(ModelSerializer):
     #Ensuring passwords are at least 8 characters long and at most 128 characeters,

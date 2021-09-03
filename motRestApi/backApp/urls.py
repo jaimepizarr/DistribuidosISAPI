@@ -30,5 +30,6 @@ urlpatterns = [
     path('local/login',LocalLoginView.as_view()),
     #path('order/all', views.get_orders),
     path('',include(router.urls)),
-    path('order/create/',views.post_order)
+    path('order/create/',views.post_order),
+    path('order/assign/<int:id>',views.assign_order)
 ]
