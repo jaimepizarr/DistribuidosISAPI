@@ -51,6 +51,11 @@ class VehicleSerializer(ModelSerializer):
         model = Vehicle
         fields = "__all__"
 
+class VehicleRetrieveSerializer(VehicleSerializer):
+    color = ColorVehicleSerializer(many=False)
+    veh_model = ModelsVehicleSerializer(many=False)
+    type_vehicle = TypeVehicleSerializer(many=False)
+
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado

@@ -9,7 +9,7 @@ from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
-from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
+from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleRetrieveSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -131,6 +131,15 @@ def get_models(request):
     model_vehicle_serializer = ModelsVehicleSerializer(model_vehicle, many=True)
     return JsonResponse(model_vehicle_serializer.data, safe=False)
 
+@api_view(["GET"])
+def getvehiclesbymot(request):
+    motorizado = request.GET.get("motorizado",None)
+    if motorizado== None:
+        raise NameError
+    vehicles = Vehicle.objects.get(motorizado = motorizado)
+    serializer = VehicleRetrieveSerializer(vehicles)
+    return Response(data = serializer.data, status= status.HTTP_200_OK)
+
 @api_view(['GET'])
 def get_motorizados(request):
     # motorizados=Motorizado.objects.all()
@@ -189,6 +198,10 @@ def assign_order(request, id):
     order = Order.objects.get(id = id)
     req = request.data.copy()
     req["mot_assigned_time"] = datetime.now()
+    motorizado = Motorizado.objects.get(user_id = req["motorizado"])
+    mot_serializer = MotSerializer(motorizado, data={"is_busy":True}, partial=True)
+    mot_serializer.is_valid(raise_exception=True)
+    mot_serializer.save()
     serializer = OrderSerializer(order, data = req,partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()

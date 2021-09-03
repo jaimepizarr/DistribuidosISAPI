@@ -21,6 +21,7 @@ urlpatterns = [
     path('motorizado/<int:id>',views.upd_mot),
     path('user/login',TokenObtainPairView.as_view()),
     path('user/refresh',TokenRefreshView.as_view()),
+    path('vehicle',views.getvehiclesbymot),
     path('vehicle/colors', views.get_colors),
     path('vehicle/type', views.get_type),
     path('vehicle/models', views.get_models),
