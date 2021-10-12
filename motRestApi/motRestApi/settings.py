@@ -94,9 +94,9 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'despachoMotorizado',
+        # 'NAME': 'despachomotoriza$default',
         # 'USER':'root',
-        # 'PASSWORD':'1803mechilotte',
+        # 'PASSWORD':'root',
         # 'HOST':'localhost',
         'NAME': 'despachomotoriza$default',
         'USER':'despachomotoriza',
@@ -141,7 +141,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-ec'
 
 TIME_ZONE = 'UTC'
 

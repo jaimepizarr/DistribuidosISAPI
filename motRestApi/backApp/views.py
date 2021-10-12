@@ -24,6 +24,7 @@ import requests
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request,format=None):
+        existed_user = User.objects.get(email=request.data["email"])
         location = LocationSerializer(data = request.data)
         location.is_valid(raise_exception=True)
         location.save()
