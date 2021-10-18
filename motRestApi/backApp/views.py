@@ -218,3 +218,35 @@ def getDistance(origin,destination):
     response = requests.request("GET", url, headers=headers, data=payload)
 
     return response.json()
+
+#Empresa necesita conocer el motorizado de un pedido
+@api_view(["GET"])
+def get_motorizado_order(request):
+    order_id = request.query_params["id"]
+    order_obj = Order.objects.get(id=order_id)
+    motorizado_id = order_obj.motorizado_id
+    motorizado_obj = Motorizado.objects.get(user_id = motorizado_id)
+    
+    motorizado = MotUserSerializer(motorizado_obj)
+    return Response(data=motorizado.data)
+
+@api_view(["PATCH"])
+def change_data_order(request, id):
+    order = Order.objects.get(id = id)
+    
+    serializer = OrderSerializer(order, data = request.data,partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status=status.HTTP_200_OK, data = serializer.data)
+
+
+
+@api_view(["PATCH"])
+def revoke_order(request,id):
+    order = Order.objects.get(id = id)
+    data = {"motorizado":None}
+    serializer = OrderSerializer(order,data = data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status = status.HTTP_200_OK, data = serializer.data)
+    
