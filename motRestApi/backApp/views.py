@@ -9,7 +9,7 @@ from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
-from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleRetrieveSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
+from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleRetrieveSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer,UserRetrieveSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -24,6 +24,7 @@ import requests
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request,format=None):
+        existed_user = User.objects.get(email=request.data["email"])
         location = LocationSerializer(data = request.data)
         location.is_valid(raise_exception=True)
         location.save()
@@ -93,6 +94,10 @@ class MotToAssignView(viewsets.ReadOnlyModelViewSet):
                                         user_id__is_operador=0,
                                         user_id__is_staff = 0).all()
     serializer_class = MotUserSerializer
+
+class UserRetrieveView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserRetrieveSerializer
 
 class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
@@ -217,3 +222,35 @@ def getDistance(origin,destination):
     response = requests.request("GET", url, headers=headers, data=payload)
 
     return response.json()
+
+#Empresa necesita conocer el motorizado de un pedido
+@api_view(["GET"])
+def get_motorizado_order(request):
+    order_id = request.query_params["id"]
+    order_obj = Order.objects.get(id=order_id)
+    motorizado_id = order_obj.motorizado_id
+    motorizado_obj = Motorizado.objects.get(user_id = motorizado_id)
+    
+    motorizado = MotUserSerializer(motorizado_obj)
+    return Response(data=motorizado.data)
+
+@api_view(["PATCH"])
+def change_data_order(request, id):
+    order = Order.objects.get(id = id)
+    
+    serializer = OrderSerializer(order, data = request.data,partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status=status.HTTP_200_OK, data = serializer.data)
+
+
+
+@api_view(["PATCH"])
+def revoke_order(request,id):
+    order = Order.objects.get(id = id)
+    data = {"motorizado":None}
+    serializer = OrderSerializer(order,data = data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status = status.HTTP_200_OK, data = serializer.data)
+    
