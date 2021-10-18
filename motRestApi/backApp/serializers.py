@@ -63,7 +63,7 @@ class MotSerializer(ModelSerializer):
 
 
 class MotUserSerializer(ModelSerializer):
-    vehicles = VehicleSerializer(read_only=True,many=True)
+    vehicles = VehicleSerializer(read_only=True,many=True, source="vehicle_set")
     user_id = UserRetrieveSerializer(read_only=True,many=False)
 
     class Meta:
