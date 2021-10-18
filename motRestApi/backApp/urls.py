@@ -2,7 +2,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, UserSignUp,OrderRetrieveView
+from .views import LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, UserRetrieveView, UserSignUp,OrderRetrieveView
 
 from .views import UserSignUp, get_models
 from backApp import views
@@ -12,6 +12,7 @@ router = DefaultRouter()
 router.register("mot_user",MotorizadoUserView)
 router.register("orders",OrderRetrieveView)
 router.register("mot_to_assign",MotToAssignView)
+router.register("user",UserRetrieveView)
 
 
 urlpatterns = [

@@ -9,7 +9,7 @@ from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
-from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleRetrieveSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer
+from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleRetrieveSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer,UserRetrieveSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -94,6 +94,10 @@ class MotToAssignView(viewsets.ReadOnlyModelViewSet):
                                         user_id__is_operador=0,
                                         user_id__is_staff = 0).all()
     serializer_class = MotUserSerializer
+
+class UserRetrieveView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserRetrieveSerializer
 
 class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
