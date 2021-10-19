@@ -84,7 +84,7 @@ class MotorizadoView(APIView):
         return Response(status = status.HTTP_200_OK, data=motorizado.data)
 
 
-class MotorizadoUserView(viewsets.ModelViewSet):
+class MotorizadoUserView(viewsets.ReadOnlyModelViewSet):
     queryset = Motorizado.objects.all()
     serializer_class = MotUserSerializer
 
