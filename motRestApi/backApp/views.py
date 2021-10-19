@@ -24,7 +24,6 @@ import requests
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request,format=None):
-        existed_user = User.objects.get(email=request.data["email"])
         location = LocationSerializer(data = request.data)
         location.is_valid(raise_exception=True)
         location.save()
@@ -224,6 +223,7 @@ def getDistance(origin,destination):
     return response.json()
 
 #Empresa necesita conocer el motorizado de un pedido
+@permission_classes([LocalAuthenticated])
 @api_view(["GET"])
 def get_motorizado_order(request):
     order_id = request.query_params["id"]
