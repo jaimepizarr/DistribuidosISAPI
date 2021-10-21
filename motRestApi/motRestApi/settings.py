@@ -32,9 +32,10 @@ ALLOWED_HOSTS = [
     'despachomotorizado.pythonanywhere.com',
     '127.0.0.1',
     'localhost',
-    '192.168.100.239'
+    '192.168.100.239',
+    '192.168.100.239:8100'
 ]
-
+# ALLOWED_HOSTS=['*']
 
 # Application definition
 
