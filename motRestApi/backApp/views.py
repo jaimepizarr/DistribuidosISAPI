@@ -24,12 +24,13 @@ import requests
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request,format=None):
-        location = LocationSerializer(data = request.data)
+        request = QueryDict.copy(request.POST)
+        location = LocationSerializer(data = request)
         location.is_valid(raise_exception=True)
         location.save()
         id_location = location.data.get("id")
-        request.data.setdefault("home_loc",id_location)
-        user = UserSerializer(data=request.data)
+        request.setdefault("home_loc",id_location)
+        user = UserSerializer(data=request)
         user.is_valid(raise_exception=True)
         user.save()
         return Response(status=status.HTTP_200_OK, data=user.data)
@@ -253,4 +254,14 @@ def revoke_order(request,id):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+
+# @api_view(["GET"])
+# def user_exists(request):
+#     email = request.query_params.get("email")
+#     try:
+#         user = User.objects.
+
+
+    
     

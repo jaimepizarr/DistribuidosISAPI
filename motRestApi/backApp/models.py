@@ -85,6 +85,7 @@ class Motorizado(models.Model):
         "Front license photo", upload_to="images/licenses/")
     license_back_photo = models.ImageField(
         "Back license photo", upload_to="images/licenses/")
+    phone_number = models.CharField(max_length=10)
     
     #admin = models.ForeignKey(User,on_delete=models.CASCADE, related_name="Admin")
 
