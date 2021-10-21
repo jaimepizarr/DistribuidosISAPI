@@ -256,12 +256,13 @@ def revoke_order(request,id):
     return Response(status = status.HTTP_200_OK, data = serializer.data)
 
 
-# @api_view(["GET"])
-# def user_exists(request):
-#     email = request.query_params.get("email")
-#     try:
-#         user = User.objects.
+@api_view(["GET"])
+def user_exists(request):
+    email = request.query_params.get("email")
+    try:
+        user = User.objects.get(email = email)
+    except:
+        return Response(status = status.HTTP_200_OK, data={"exists":False})
+    return Response(status = status.HTTP_200_OK, data={"exists":True})
 
-
-    
     

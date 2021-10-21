@@ -16,6 +16,7 @@ router.register("user",UserRetrieveView)
 
 
 urlpatterns = [
+    path('user_exists',views.user_exists),
     path('user/register',UserSignUp.as_view()),
     path('user/<int:id>',UserSignUp.as_view()),
     path('motorizado',MotorizadoView.as_view()),
