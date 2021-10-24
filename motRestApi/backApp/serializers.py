@@ -46,7 +46,7 @@ class PhoneUserRetrieveSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","is_staff","is_motorizado","birth_date","home_loc"]
+        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","is_staff","is_motorizado","is_active","birth_date","home_loc"]
     
     def create(self, validated_data):
         password = validated_data.pop('password',None)
