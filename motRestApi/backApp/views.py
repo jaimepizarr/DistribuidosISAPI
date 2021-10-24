@@ -9,7 +9,7 @@ from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
 from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
-from backApp.serializers import LocalLoginSerializer, LocalRegistrationSerializer, LocationSerializer, ModelsVehicleSerializer, OrderAllSerializer, UserSerializer, MotSerializer, VehicleRetrieveSerializer, VehicleSerializer, ColorVehicleSerializer, TypeVehicleSerializer, MotUserSerializer, OrderSerializer,UserRetrieveSerializer
+from backApp.serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -24,16 +24,34 @@ import requests
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request,format=None):
+        profile_pic = dict((request.data).lists())["profile_pic"][0]
+        #Create Location
         request = QueryDict.copy(request.POST)
+        request.setdefault("profile_pic",profile_pic)
         location = LocationSerializer(data = request)
         location.is_valid(raise_exception=True)
         location.save()
         id_location = location.data.get("id")
         request.setdefault("home_loc",id_location)
+        #Create user
         user = UserSerializer(data=request)
         user.is_valid(raise_exception=True)
         user.save()
-        return Response(status=status.HTTP_200_OK, data=user.data)
+        #Create Phone
+        ph_number = request.get("phone_number")
+        phone = PhoneSerializer(data = {"pho_number":ph_number})
+        phone.is_valid(raise_exception=True)
+        phone.save()
+        #Join Phone and USer
+        print(user.data)
+        phone_user_dict = {
+            "idPhone":phone.data.get("id"),
+            "user": user.data.get("id")
+            }
+        phone_user = PhoneUserSerializer(data = phone_user_dict)
+        phone_user.is_valid(raise_exception=True)
+        phone_user.save()
+        return Response(status=status.HTTP_200_OK, data={"user":user.data, "phone":phone.data})
 
     def patch(self,request,id):
         user = User.objects.get(id = id)
@@ -187,7 +205,7 @@ def post_order(request):
     # local_location = local.location_id
     #origin = local_location.longitude, local_location.latitude
     #destination = destiny.longitude, destiny.latitude
-    # distance_matrix = json.load(getDistance(origin,destination)) 
+    # distance_matrix = json.load(getDistance(origin,destination))
     # distance = distance_matrix["rows"][0]["elements"][0]["distance"]
     # duration = distance_matrix["rows"][0]["elements"][0]["duration"]
 
@@ -231,14 +249,14 @@ def get_motorizado_order(request):
     order_obj = Order.objects.get(id=order_id)
     motorizado_id = order_obj.motorizado_id
     motorizado_obj = Motorizado.objects.get(user_id = motorizado_id)
-    
+
     motorizado = MotUserSerializer(motorizado_obj)
     return Response(data=motorizado.data)
 
 @api_view(["PATCH"])
 def change_data_order(request, id):
     order = Order.objects.get(id = id)
-    
+
     serializer = OrderSerializer(order, data = request.data,partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -265,4 +283,12 @@ def user_exists(request):
         return Response(status = status.HTTP_200_OK, data={"exists":False})
     return Response(status = status.HTTP_200_OK, data={"exists":True})
 
-    
+
+@api_view(["GET"])
+def get_order_state(request):
+    id  = request.query_params.get("id")
+    equivalencia = Order.state_eq
+    order = Order.objects.get(id=id)
+    state_id = order.state
+    state_descrip = equivalencia.get(state_id)
+    return Response(status = status.HTTP_200_OK, data = {"state":state_descrip})

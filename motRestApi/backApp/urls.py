@@ -37,5 +37,6 @@ urlpatterns = [
     path('order/assign/<int:id>',views.assign_order),
     path('order/motorizado', views.get_motorizado_order),
     path('order/statechange/<int:id>',views.change_data_order),
-    path('order/revoke/<int:id>',views.revoke_order)
+    path('order/revoke/<int:id>',views.revoke_order),
+    path('order/state',views.get_order_state)
 ]

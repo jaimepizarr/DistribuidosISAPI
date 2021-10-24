@@ -7,7 +7,7 @@ from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
 from rest_framework.serializers import ModelSerializer, Serializer
-from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle
+from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle,Phone, PhoneUser
 
 
 class ColorVehicleSerializer(ModelSerializer):
@@ -30,6 +30,19 @@ class LocationSerializer(ModelSerializer):
         model = Location
         fields = ["id","longitude","latitude","reference"]
 
+class PhoneRetrieveSerializer(ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = ["pho_number"]
+
+
+class PhoneUserRetrieveSerializer(ModelSerializer):
+    idPhone = PhoneRetrieveSerializer(many = False)
+
+    class Meta:
+        model = PhoneUser
+        fields = ["idPhone"]
+
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
@@ -45,6 +58,10 @@ class UserSerializer(ModelSerializer):
 
 class UserRetrieveSerializer(UserSerializer):
     home_loc=LocationSerializer(many=False,read_only = True)
+    phones = PhoneUserRetrieveSerializer(read_only=True,many=True, source="phoneuser_set")
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ["phones"]
+    
 
 class VehicleSerializer(ModelSerializer):
     class Meta:
@@ -171,4 +188,12 @@ class OrderAllSerializer(OrderSerializer):
     client=ClienteSerializer(many=False)
     payment=PaymentSerializer(many=False)
     
-    
+class PhoneSerializer(ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = "__all__"
+        
+class PhoneUserSerializer(ModelSerializer):
+    class Meta:
+        model = PhoneUser
+        fields = "__all__"
