@@ -85,7 +85,6 @@ class Motorizado(models.Model):
         "Front license photo", upload_to="images/licenses/")
     license_back_photo = models.ImageField(
         "Back license photo", upload_to="images/licenses/")
-    phone_number = models.CharField(max_length=10)
     
     #admin = models.ForeignKey(User,on_delete=models.CASCADE, related_name="Admin")
 
@@ -236,12 +235,22 @@ class PhoneClient(models.Model):
     idPhone = models.ForeignKey(Phone, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
+class PhoneUser(models.Model):
+    idPhone = models.ForeignKey(Phone, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
 class Payment(models.Model):
     payment_type = models.CharField("Type of payment", max_length=50)
 
 
 class Order(models.Model):
+    state_eq = {1:"En Espera",
+                2: "Aceptado",
+                3: "Recogiendo",
+                4: "Entregando",
+                5: "Terminado",
+                6: "Cancelado"}
+
     details = models.CharField("Details of the order", max_length=100)
     price = models.FloatField("Order price")
     delivery_price = models.FloatField("Delivery price", null= True)
