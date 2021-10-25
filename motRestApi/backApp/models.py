@@ -76,6 +76,7 @@ class Motorizado(models.Model):
     user_id = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True)
     is_busy = models.BooleanField("",default=False)
+    connected = models.BooleanField("", default=False)
     isOnline = models.BooleanField("", default=False)
     id_front_photo = models.ImageField(
         "Front photo of id", upload_to="images/ids/")

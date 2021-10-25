@@ -122,7 +122,7 @@ class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderAllSerializer
 
 @api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
+#@permission_classes([IsAuthenticated])
 def upd_mot(request, id):
     motorizado = Motorizado.objects.get(user_id=id)
     serializer = MotSerializer(motorizado, data=request.data, partial=True)
@@ -172,15 +172,16 @@ def get_motorizados(request):
     motorizados_serializer=MotSerializer(qs)
     return Response(data = motorizados_serializer.data, status = status.HTTP_200_OK)
 
-@api_view(['PUT'])
-def update_motorizado(request):
-    motorizado = User.objects.filter(id=request.data['id']).first()
-    serializer = UserSerializer(motorizado, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(status=status.HTTP_200_OK,data=serializer.data)
+# @api_view(['Patch'])
+# def update_motorizado(request):
+#     print(request.data)
+#     motorizado = User.objects.filter(id=request.data['id']).first()
+#     serializer = UserSerializer(motorizado, data=request.data, partial=True)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return Response(status=status.HTTP_200_OK,data=serializer.data)
 
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+#     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def get_orders(request):

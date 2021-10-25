@@ -76,7 +76,7 @@ class VehicleRetrieveSerializer(VehicleSerializer):
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy","connected"]
 
 
 class MotUserSerializer(ModelSerializer):
