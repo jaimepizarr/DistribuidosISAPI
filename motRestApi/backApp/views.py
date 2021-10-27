@@ -21,6 +21,15 @@ import json
 from django.conf import settings
 import requests
 
+class SuperUser(APIView):
+
+    def post(self,request):
+        superuser = SuperUserSerializer(data=request.data)
+        if superuser.is_valid():
+            superuser.save()
+            return Response(superuser.data, status=status.HTTP_201_CREATED)
+        return Response(superuser.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UserSignUp(APIView):
     parser_classes= [MultiPartParser, FormParser]
     def post(self,request,format=None):
@@ -34,6 +43,7 @@ class UserSignUp(APIView):
         id_location = location.data.get("id")
         request.setdefault("home_loc",id_location)
         #Create user
+        request.setdefault("is_active",True)
         user = UserSerializer(data=request)
         user.is_valid(raise_exception=True)
         user.save()
@@ -78,10 +88,19 @@ class LocalRegistrationView(APIView):
         local.save()
 
         return Response(data=local.data, status=status.HTTP_201_CREATED)
+    
+    def get(self, request, format=None, id =None):
+        if id:
+            local = Local.objects.get(id = id)
+            local_ser = LocalSerializer(local)
+            local_ser.is_valid(raise_exception= True)
+        else:
+            locales = Local.objects.all()
+            local_ser = LocalSerializer(locales, many=True)
+        return Response(status = status.HTTP_200_OK, data = local_ser.data)
 
 
 class LocalLoginView(APIView):
-
     def post(self,request):
         local = LocalLoginSerializer(data= request.data)
         local.is_valid(raise_exception=True)
@@ -190,7 +209,7 @@ def get_orders(request):
     return JsonResponse(orders_serializer.data, safe=False)
 
 @api_view(["POST"])
-@permission_classes([LocalAuthenticated])
+#permission_classes([LocalAuthenticated])
 def post_order(request):
     req = dict.copy(request.data)
     req_client = req.get("client")
@@ -293,3 +312,10 @@ def get_order_state(request):
     state_id = order.state
     state_descrip = equivalencia.get(state_id)
     return Response(status = status.HTTP_200_OK, data = {"state":state_descrip})
+
+@api_view(["GET"])
+def get_mot_orders(request,id):
+    motorizado = Motorizado.objects.get(user_id = id)
+    orders = Order.objects.filter(motorizado = motorizado.id)
+    serializer = OrderSerializer(orders)
+    return Response(status = status.HTTP_200_OK, data = serializer.data)
