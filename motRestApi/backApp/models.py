@@ -29,6 +29,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.is_active = True
         user.save(using=self._db)
         return user
 
@@ -247,11 +248,12 @@ class Payment(models.Model):
 
 class Order(models.Model):
     state_eq = {1:"En Espera",
-                2: "Aceptado",
-                3: "Recogiendo",
-                4: "Entregando",
-                5: "Terminado",
-                6: "Cancelado"}
+                2: "Asignado",
+                3: "Aceptado",
+                4: "Recogiendo",
+                5: "Entregando",
+                6: "Terminado",
+                7: "Cancelado"}
 
     details = models.CharField("Details of the order", max_length=100)
     price = models.FloatField("Order price")
