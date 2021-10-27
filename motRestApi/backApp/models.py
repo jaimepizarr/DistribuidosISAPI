@@ -36,6 +36,7 @@ class UserManager(BaseUserManager):
         """Create and save a regular User with the given email and password."""
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault('is_active', True)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
@@ -86,7 +87,7 @@ class Motorizado(models.Model):
         "Front license photo", upload_to="images/licenses/")
     license_back_photo = models.ImageField(
         "Back license photo", upload_to="images/licenses/")
-    
+
     #admin = models.ForeignKey(User,on_delete=models.CASCADE, related_name="Admin")
 
 
@@ -136,7 +137,7 @@ class Local(models.Model):
         "Logo image", upload_to="images/Locals/logos", null=True, blank=True)
     reg_date = models.DateField(auto_now_add=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
     objects = LocalManager()
 
     @property
@@ -148,7 +149,7 @@ class Local(models.Model):
             'exp':int(time.mktime(dt.timetuple()))
         },settings.SECRET_KEY,algorithm="HS256")
         return token
-    
+
     def set_password(self,raw_password):
         self.password = make_password(raw_password)
         self._password = raw_password
