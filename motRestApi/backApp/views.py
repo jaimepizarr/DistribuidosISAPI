@@ -291,7 +291,8 @@ def change_data_order(request, id):
 @api_view(["PATCH"])
 def revoke_order(request,id):
     order = Order.objects.get(id = id)
-    data = {"motorizado":None}
+    data = {"motorizado":None,
+            "state":1,}
     serializer = OrderSerializer(order,data = data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
