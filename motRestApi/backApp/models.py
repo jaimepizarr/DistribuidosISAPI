@@ -29,6 +29,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.is_active = True
         user.save(using=self._db)
         return user
 
@@ -76,6 +77,7 @@ class Motorizado(models.Model):
     user_id = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True)
     is_busy = models.BooleanField("",default=False)
+    connected = models.BooleanField("", default=False)
     isOnline = models.BooleanField("", default=False)
     id_front_photo = models.ImageField(
         "Front photo of id", upload_to="images/ids/")
@@ -235,12 +237,23 @@ class PhoneClient(models.Model):
     idPhone = models.ForeignKey(Phone, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
+class PhoneUser(models.Model):
+    idPhone = models.ForeignKey(Phone, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
 class Payment(models.Model):
     payment_type = models.CharField("Type of payment", max_length=50)
 
 
 class Order(models.Model):
+    state_eq = {1:"En Espera",
+                2: "Asignado",
+                3: "Aceptado",
+                4: "Recogiendo",
+                5: "Entregando",
+                6: "Terminado",
+                7: "Cancelado"}
+
     details = models.CharField("Details of the order", max_length=100)
     price = models.FloatField("Order price")
     delivery_price = models.FloatField("Delivery price", null= True)

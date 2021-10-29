@@ -7,7 +7,7 @@ from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
 from rest_framework.serializers import ModelSerializer, Serializer
-from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle
+from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle,Phone, PhoneUser
 
 
 class ColorVehicleSerializer(ModelSerializer):
@@ -30,10 +30,37 @@ class LocationSerializer(ModelSerializer):
         model = Location
         fields = ["id","longitude","latitude","reference"]
 
+class PhoneRetrieveSerializer(ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = ["pho_number"]
+
+
+class PhoneUserRetrieveSerializer(ModelSerializer):
+    idPhone = PhoneRetrieveSerializer(many = False)
+
+    class Meta:
+        model = PhoneUser
+        fields = ["idPhone"]
+
+class SuperUserSerializer(ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ["id","email","password","first_name","last_name","is_staff","is_superuser"]
+
+    def create(self, validated_data):
+        password = validated_data.pop('password',None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","is_staff","is_motorizado","birth_date","home_loc"]
+        fields = ["id",'first_name','last_name',"email","password","number_id","gender","profile_pic","is_operador","is_staff","is_motorizado","is_active","birth_date","home_loc"]
     
     def create(self, validated_data):
         password = validated_data.pop('password',None)
@@ -45,6 +72,10 @@ class UserSerializer(ModelSerializer):
 
 class UserRetrieveSerializer(UserSerializer):
     home_loc=LocationSerializer(many=False,read_only = True)
+    phones = PhoneUserRetrieveSerializer(read_only=True,many=True, source="phoneuser_set")
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ["phones"]
+    
 
 class VehicleSerializer(ModelSerializer):
     class Meta:
@@ -59,16 +90,16 @@ class VehicleRetrieveSerializer(VehicleSerializer):
 class MotSerializer(ModelSerializer):
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy","connected"]
 
 
 class MotUserSerializer(ModelSerializer):
-    vehicles = VehicleSerializer(read_only=True,many=True)
+    vehicles = VehicleRetrieveSerializer(read_only=True,many=True, source="vehicle_set")
     user_id = UserRetrieveSerializer(read_only=True,many=False)
 
     class Meta:
         model = Motorizado
-        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy","vehicles"]
+        fields = ["user_id","id_front_photo","id_back_photo","license_front_photo","license_back_photo","isOnline","is_busy","vehicles","connected"]
     
     # # select_related_fields = ('user_id',)
     # @classmethod
@@ -167,8 +198,17 @@ class OrderSerializer(ModelSerializer):
 class OrderAllSerializer(OrderSerializer):
     local=LocalSerializer(many=False)
     destiny_loc=LocationSerializer(many=False)
-    motorizado=MotSerializer(many=False)
+    motorizado=MotUserSerializer(many=False)
     client=ClienteSerializer(many=False)
     payment=PaymentSerializer(many=False)
     
-    
+class PhoneSerializer(ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = "__all__"
+        
+class PhoneUserSerializer(ModelSerializer):
+    class Meta:
+        model = PhoneUser
+        fields = "__all__"
+        

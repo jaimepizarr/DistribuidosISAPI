@@ -32,9 +32,10 @@ ALLOWED_HOSTS = [
     'despachomotorizado.pythonanywhere.com',
     '127.0.0.1',
     'localhost',
-    '192.168.100.239'
+    '192.168.100.239',
+    '192.168.100.239:8100'
 ]
-
+# ALLOWED_HOSTS=['*']
 
 # Application definition
 
@@ -94,10 +95,8 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'despachoMotorizado',
-        # 'USER':'root',
-        # 'PASSWORD':'1803mechilotte',
         # 'HOST':'localhost',
+        # 'PORT':'3333',
         'NAME': 'despachomotoriza$default',
         'USER':'despachomotoriza',
         'PASSWORD':'DBd3sp@ch0',
@@ -141,7 +140,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-ec'
 
 TIME_ZONE = 'UTC'
 
@@ -179,3 +178,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "backApp.User"
 
 GOOGLE_API_KEY = "AIzaSyBHEIRG5sYxESIrlMyq664B6HT3fVw7Wxg"
+
+SITE_ID=1
