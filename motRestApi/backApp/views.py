@@ -321,6 +321,8 @@ def get_order_state(request):
 @api_view(["GET"])
 def get_mot_orders(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
-    orders = Order.objects.filter(motorizado = motorizado.id)
-    serializer = OrderSerializer(orders)
-    return Response(status = status.HTTP_200_OK, data = serializer.data)
+    orders = Order.objects.filter(motorizado = motorizado)
+    if len(orders):
+        serializer = OrderSerializer(orders, many=True)
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+    return Response(status = status.HTTP_204_NO_CONTENT, data = [])

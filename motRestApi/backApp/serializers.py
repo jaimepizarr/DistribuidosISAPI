@@ -198,7 +198,7 @@ class OrderSerializer(ModelSerializer):
 class OrderAllSerializer(OrderSerializer):
     local=LocalSerializer(many=False)
     destiny_loc=LocationSerializer(many=False)
-    motorizado=MotSerializer(many=False)
+    motorizado=MotUserSerializer(many=False)
     client=ClienteSerializer(many=False)
     payment=PaymentSerializer(many=False)
     
