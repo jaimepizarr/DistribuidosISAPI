@@ -323,6 +323,6 @@ def get_mot_orders(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
     orders = Order.objects.filter(motorizado = motorizado)
     if len(orders):
-        serializer = OrderSerializer(orders, many=True)
+        serializer = OrderAllSerializer(orders, many=True)
         return Response(status = status.HTTP_200_OK, data = serializer.data)
     return Response(status = status.HTTP_204_NO_CONTENT, data = [])
