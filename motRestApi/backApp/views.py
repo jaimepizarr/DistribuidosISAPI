@@ -321,8 +321,29 @@ def get_order_state(request):
 @api_view(["GET"])
 def get_mot_orders(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
-    orders = Order.objects.filter(motorizado = motorizado)
+    orders = Order.objects.filter(motorizado = motorizado).filter(state = 2)
     if len(orders):
         serializer = OrderAllSerializer(orders, many=True)
         return Response(status = status.HTTP_200_OK, data = serializer.data)
     return Response(status = status.HTTP_204_NO_CONTENT, data = [])
+
+@api_view(["PATCH"])
+def accept_order(request,id):
+    order = Order.objects.get(id = id)
+    data = {"state":3}
+    serializer = OrderSerializer(order, data = data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+@api_view(["PATCH"])
+def reject_order(request,id):
+    order = Order.objects.get(id = id)
+    motorizado = order.motorizado
+    data = {"state":1,
+            "mot_assigned_time":None,
+            "motorizado":None,}
+    serializer = OrderSerializer(order, data = data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(status = status.HTTP_200_OK, data = serializer.data+{"rejected_by":motorizado})
