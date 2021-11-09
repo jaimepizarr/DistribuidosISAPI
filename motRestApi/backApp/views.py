@@ -346,4 +346,5 @@ def reject_order(request,id):
     serializer = OrderSerializer(order, data = data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    return Response(status = status.HTTP_200_OK, data = serializer.data+{"rejected_by":motorizado})
+    return_data = dict(serializer.data).update({"rejected_by":motorizado})
+    return Response(status = status.HTTP_200_OK, data = return_data)
