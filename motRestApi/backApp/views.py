@@ -336,6 +336,15 @@ def get_mot_orders_active(request,id):
         return Response(status = status.HTTP_200_OK, data = serializer.data)
     return Response(status = status.HTTP_204_NO_CONTENT, data = [])
 
+@api_view(["GET"])
+def get_mot_orders_assigned(request,id):
+    motorizado = Motorizado.objects.get(user_id = id)
+    orders = Order.objects.filter(motorizado = motorizado).filter(state=2)
+    if len(orders):
+        serializer = OrderAllSerializer(orders, many=True)
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+    return Response(status = status.HTTP_204_NO_CONTENT, data = [])
+
 @api_view(["PATCH"])
 def accept_order(request,id):
     order = Order.objects.get(id = id)
