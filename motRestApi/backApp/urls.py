@@ -47,4 +47,5 @@ urlpatterns = [
     path('order/accept/<int:id>',views.accept_order),
     path('order/reject/<int:id>',views.reject_order),
     path('order/count_by_mot/<int:id>',views.count_by_mot),
+    path('orders_by_date', views.orders_by_dates),
 ]

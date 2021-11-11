@@ -363,4 +363,23 @@ def count_by_mot(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
     orders = Order.objects.filter(motorizado = motorizado)
     return Response(status = status.HTTP_200_OK, data = {"count":len(orders)})
+
+@api_view(["GET"])
+def orders_by_dates(request):
+    start_date = request.query_params.get("start_date")
+    end_date = request.query_params.get("end_date")
+    motorizado = request.query_params.get("motorizado")
+    if start_date or end_date:
+        if(start_date and end_date):
+            orders = Order.objects.filter(motorizado = motorizado).filter(start_time__range=[start_date,end_date])
+        elif (start_date):
+            orders_all = Order.objects.filter(motorizado = motorizado)
+            orders = []
+            for order in orders_all:
+                if str(datetime.date(order.start_time)) == start_date:
+                    orders.append(order.id)
+            orders = Order.objects.filter(id__in=orders)
+        serializer = OrderAllSerializer(orders, many=True)
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+    return Response(status = status.HTTP_400_BAD_REQUEST, data = [])
     
