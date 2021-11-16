@@ -339,7 +339,16 @@ def get_mot_orders_active(request,id):
 @api_view(["GET"])
 def get_mot_orders_assigned(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
-    orders = Order.objects.filter(motorizado = motorizado).filter(state=2)
+    orders = Order.objects.filter(motorizado = motorizado).filter(state=2) #Retornar 2,3,4,5
+    if len(orders):
+        serializer = OrderAllSerializer(orders, many=True)
+        return Response(status = status.HTTP_200_OK, data = serializer.data)
+    return Response(status = status.HTTP_204_NO_CONTENT, data = [])
+
+@api_view(["GET"])
+def get_mot_orders_finished(request,id):
+    motorizado = Motorizado.objects.get(user_id = id)
+    orders = Order.objects.filter(motorizado = motorizado).filter(state=6)
     if len(orders):
         serializer = OrderAllSerializer(orders, many=True)
         return Response(status = status.HTTP_200_OK, data = serializer.data)
@@ -370,7 +379,7 @@ def reject_order(request,id):
 @api_view(["GET"])
 def count_by_mot(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
-    orders = Order.objects.filter(motorizado = motorizado)
+    orders = Order.objects.filter(motorizado = motorizado).filter(state=6)
     return Response(status = status.HTTP_200_OK, data = {"count":len(orders)})
 
 @api_view(["GET"])
