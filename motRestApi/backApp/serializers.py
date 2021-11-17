@@ -171,7 +171,7 @@ class PaymentSerializer(ModelSerializer):
 class OrderSerializer(ModelSerializer):
     class Meta:
         model = Order
-        fields = ["id","local","destiny_loc","motorizado","client","payment","details","price","delivery_price","state","start_time","mot_assigned_time","deliv_start_time","arriv_estimated_time","real_arriv_time","is_paid","operador"]
+        fields = ["id","local","destiny_loc","motorizado","client","payment","details","price","delivery_price","state","start_time","mot_assigned_time","deliv_start_time","arriv_estimated_time","real_arriv_time","is_paid","mot_paid","operador"]
     
     # def create(self, validated_data):
     #     print("HEy")

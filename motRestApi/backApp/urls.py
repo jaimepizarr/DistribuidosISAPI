@@ -39,7 +39,15 @@ urlpatterns = [
     path('order/assign/<int:id>',views.assign_order),
     path('order/motorizado', views.get_motorizado_order),
     path('order/statechange/<int:id>',views.change_data_order),
+    path('order/change/<int:id>',views.change_data_order),
     path('order/revoke/<int:id>',views.revoke_order),
     path('order/state',views.get_order_state),
-    path('order_by_mot/<int:id>',views.get_mot_orders)
+    path('order_by_mot/active/<int:id>',views.get_mot_orders_active),
+    path('order_by_mot/assigned/<int:id>',views.get_mot_orders_assigned),
+    path('order_by_mot/finished/<int:id>',views.get_mot_orders_finished),
+    path("order_hist_by_mot/<int:id>",views.get_mot_orders),
+    path('order/accept/<int:id>',views.accept_order),
+    path('order/reject/<int:id>',views.reject_order),
+    path('order/count_by_mot/<int:id>',views.count_by_mot),
+    path('orders_by_date', views.orders_by_dates),
 ]

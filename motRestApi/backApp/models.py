@@ -279,6 +279,7 @@ class Order(models.Model):
         Location,  on_delete=models.SET_NULL, null=True)
     local = models.ForeignKey(Local, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True)
+    mot_paid = models.BooleanField("Is paid to the motorizado", default=False)
 
 
 class OrderComments(models.Model):
