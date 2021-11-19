@@ -20,6 +20,8 @@ from rest_framework import viewsets
 import json
 from django.conf import settings
 import requests
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 class SuperUser(APIView):
 
@@ -400,4 +402,21 @@ def orders_by_dates(request):
         serializer = OrderAllSerializer(orders, many=True)
         return Response(status = status.HTTP_200_OK, data = serializer.data)
     return Response(status = status.HTTP_400_BAD_REQUEST, data = [])
-    
+
+@api_view(["GET"])
+def get_mot_location(request,id):
+    order = Order.objects.get(id = id)
+    if order.state in (1,2,3):
+        return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden aún no está siendo recogida"})
+    if order.state in (4,5):
+        motorizado = order.motorizado
+        mot_ser = MotSerializer(motorizado)
+        db = firestore.client()
+        location = db.collection("motorizados").document(str(mot_ser.data.get("user_id"))).get()
+        if location.exists:
+            location = location.to_dict()
+            return Response(status = status.HTTP_200_OK, data = location)
+        else:
+            return Response(status = status.HTTP_400_BAD_REQUEST, data = [])
+    if order.state == 6:
+        return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden ya ha terminado"})

@@ -286,3 +286,7 @@ class OrderComments(models.Model):
     comment = models.TextField("Comments about the delivery of the order")
     grade = models.FloatField("Delivery grading")
     idOrder = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+class MotDeviceRegister(models.Model):
+    idMot = models.ForeignKey(Motorizado, on_delete=models.CASCADE)
+    idDevice = models.CharField("Device ID", max_length=50)

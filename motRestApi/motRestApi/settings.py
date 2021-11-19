@@ -14,6 +14,12 @@ from pathlib import Path
 import os
 import mimetypes
 from datetime import timedelta
+import firebase_admin
+from firebase_admin import credentials
+
+if not firebase_admin._apps:
+    cred = credentials.Certificate('./config.json') 
+    firebase_admin.initialize_app(cred)
 
 mimetypes.add_type("text/javascript", ".js", True)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
