@@ -103,12 +103,14 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'HOST':'localhost',
+        'HOST':'localhost',
         # 'PORT':'3333',
         'NAME': 'despachomotoriza$default',
-        'USER':'despachomotoriza',
-        'PASSWORD':'DBd3sp@ch0',
-        'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        # 'USER':'despachomotoriza',
+        # 'PASSWORD':'DBd3sp@ch0',
+        # 'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306'
     },
     'sqlite': {

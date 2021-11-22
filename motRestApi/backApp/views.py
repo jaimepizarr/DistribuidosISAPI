@@ -21,7 +21,7 @@ import json
 from django.conf import settings
 import requests
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, messaging
 
 class SuperUser(APIView):
 
@@ -254,6 +254,22 @@ def assign_order(request, id):
     serializer = OrderSerializer(order, data = req,partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
+    lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
+    dataSended = {
+        'message': 'Se ha asignado una nueva orden',
+        'code': 1
+    }
+    prueba =messaging.MulticastMessage(
+        data={
+            'title': 'Nueva orden',
+            'body': json.dumps(dataSended, separators=(',',':')),
+        },
+        tokens=lista_regis
+    )
+    respues=messaging.send_multicast(prueba)
+    print ("repsuesta",respues)
+    
+    print(serializer.data)
     return Response(status=status.HTTP_200_OK, data = serializer.data)
 
 
@@ -289,7 +305,6 @@ def change_data_order(request, id):
     return Response(status=status.HTTP_200_OK, data = serializer.data)
 
 
-
 @api_view(["PATCH"])
 def revoke_order(request,id):
     order = Order.objects.get(id = id)
@@ -298,6 +313,51 @@ def revoke_order(request,id):
     serializer = OrderSerializer(order,data = data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
+    dataSended = {
+        'message': 'Se ha revocado su orden',
+        'code': 2
+    }
+    lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
+    # prueba =messaging.MulticastMessage(
+    #     tokens=lista_regis,
+    #     notification=messaging.Notification(
+    #         data={
+    #         'title': 'Orden revocada',
+    #         'body': json.dumps(dataSended, separators=(',',':')),
+    #     }
+    # ))
+    messa=messaging.Message(
+        # data={
+        #     'title': 'Orden revocada',
+        #     'body': json.dumps(dataSended, separators=(',',':')),
+        # },
+        notification=messaging.Notification(
+            title='Orden revocada',
+            body='Orden revocada',
+            icon='https://goo.gl/Fz9nrQ',
+            click_action='https://goo.gl/Fz9nrQ'
+        ),
+        android=messaging.AndroidConfig(
+        ttl=datetime.timedelta(seconds=3600),
+        priority='normal',
+        notification=messaging.AndroidNotification(
+            icon='stock_ticker_update',
+            color='#f45342',
+            priority='high',
+        ),
+    ),
+    apns=messaging.APNSConfig(
+        payload=messaging.APNSPayload(
+            aps=messaging.Aps(badge=42),
+        ),
+    ),
+        token='fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e'
+    )
+    response = messaging.send(messa)
+    print(response)
+    return Response(status=status.HTTP_200_OK, data = serializer.data)
+    # respues=messaging.send_multicast(prueba)
+    # print ("repsuesta",respues)
     return Response(status = status.HTTP_200_OK, data = serializer.data)
 
 

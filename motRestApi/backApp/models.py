@@ -136,7 +136,7 @@ class Local(models.Model):
     email = models.EmailField("Local email", max_length=254)
     logo_img = models.ImageField(
         "Logo image", upload_to="images/Locals/logos", null=True, blank=True)
-    reg_date = models.DateField(auto_now_add=True)
+    reg_date = models.DateField(auto_now_add=True,null=True,blank=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
 
     objects = LocalManager()
