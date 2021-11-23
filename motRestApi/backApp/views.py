@@ -106,7 +106,7 @@ class LocalRegistrationView(APIView):
         local.save()
 
         return Response(data=local.data, status=status.HTTP_201_CREATED)
-    
+
     def get(self, request, format=None, id =None):
         if id:
             local = Local.objects.get(id = id)
@@ -253,6 +253,21 @@ def post_order(request):
     order.save()
     return Response(data=order.data)
 
+def sendPushNotification(title,message,code,idOrder,tokens):
+    dataObject={
+            'idOrder': idOrder,
+            'code':code
+        }
+    notifSend=messaging.Notification(title=title,body=message)
+    sendMes =messaging.MulticastMessage(
+        notification=notifSend,
+        data={'title':'Objeto','body':json.dumps(dataObject, separators=(',',':'))},
+        tokens=tokens,
+        )
+
+    respues=messaging.send_multicast(sendMes)
+    print ("repsuesta",respues)
+
 @api_view(["PATCH"])
 def assign_order(request, id):
     order = Order.objects.get(id = id)
@@ -271,22 +286,26 @@ def assign_order(request, id):
     for device in devices:
         lista_regis.append(device.idDevice)
     #lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
-    dataSended = {
-        'message': 'Se ha asignado una nueva orden',
-        'code': 1
-    }
-    prueba =messaging.MulticastMessage(
-        data={
-            'title': 'Nueva orden',
-            'body': json.dumps(dataSended, separators=(',',':')),
-        },
-        tokens=lista_regis
-    )
-    respues=messaging.send_multicast(prueba)
-    print ("repsuesta",respues)
-    
-    print(serializer.data)
+    # dataSended = {
+    #     'message': 'Se ha asignado una nueva orden',
+    #     'code': 1
+    # }
+    # notif=messaging.Notification(title='Nueva orden',body=json.dumps(dataSended, separators=(',',':')))
+    # prueba =messaging.MulticastMessage(
+    #     notification=notif,
+    #     data={
+    #         'title': 'Nueva orden',
+    #         'body': json.dumps(dataSended, separators=(',',':')),
+    #     },
+    #     tokens=lista_regis,
+    # )
+    # respues=messaging.send_multicast(prueba)
+    # print ("repsuesta",respues)
+
+    # print(serializer.data)
+    sendPushNotification('Nueva orden','Se le ha asignado una nueva orden',1,id,lista_regis)
     return Response(status=status.HTTP_200_OK, data = serializer.data)
+
 
 
 def getDistance(origin,destination):
@@ -339,13 +358,14 @@ def revoke_order(request,id):
     lista_regis = []
     for device in devices:
         lista_regis.append(device.idDevice)
-    prueba =messaging.MulticastMessage(
-        data={
-            'title': 'Orden revocada',
-            'body': json.dumps(dataSended, separators=(',',':')),
-        },
-        tokens=lista_regis
-    )
+    sendPushNotification('Orden revocada','Se le ha revocado una orden',2,id,lista_regis)
+    # prueba =messaging.MulticastMessage(
+    #     data={
+    #         'title': 'Orden revocada',
+    #         'body': json.dumps(dataSended, separators=(',',':')),
+    #     },
+    #     tokens=lista_regis
+    # )
     # prueba =messaging.MulticastMessage(
     #     tokens=lista_regis,
     #     notification=messaging.Notification(
@@ -384,8 +404,8 @@ def revoke_order(request,id):
     # response = messaging.send(messa)
     # print(response)
     # return Response(status=status.HTTP_200_OK, data = serializer.data)
-    respues=messaging.send_multicast(prueba)
-    print ("repsuesta",respues)
+    # respues=messaging.send_multicast(prueba)
+    # print ("repsuesta",respues)
     return Response(status = status.HTTP_200_OK, data = serializer.data)
 
 
