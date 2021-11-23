@@ -289,4 +289,4 @@ class OrderComments(models.Model):
 
 class MotDeviceRegister(models.Model):
     idMot = models.ForeignKey(Motorizado, on_delete=models.CASCADE)
-    idDevice = models.CharField("Device ID", max_length=50)
+    idDevice = models.TextField("Device ID")

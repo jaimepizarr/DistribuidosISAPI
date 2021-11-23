@@ -8,7 +8,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location
+from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location, MotDeviceRegister
 from backApp.serializers import *
 from rest_framework.response import Response
 from rest_framework import status
@@ -71,6 +71,18 @@ class UserSignUp(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_200_OK, data = serializer.data)
+
+@api_view(['POST'])
+def register_motdevice(request):
+    motDeviceRegister = MotDeviceRegister.objects.filter(idDevice = request.data.get("idDevice"))
+    if motDeviceRegister:
+        return Response(status=status.HTTP_200_OK, data={"message":"Device already registered"})
+    else:
+        deviceRegister = MotDeviceRegisterSerializer(data = request.data)
+        if deviceRegister.is_valid():
+            deviceRegister.save()
+            return Response(deviceRegister.data, status=status.HTTP_201_CREATED)
+        return Response(deviceRegister.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserRetrieveView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
@@ -254,7 +266,11 @@ def assign_order(request, id):
     serializer = OrderSerializer(order, data = req,partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
+    devices = MotDeviceRegister.objects.filter(idMot = req["motorizado"])
+    lista_regis = []
+    for device in devices:
+        lista_regis.append(device.idDevice)
+    #lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
     dataSended = {
         'message': 'Se ha asignado una nueva orden',
         'code': 1
@@ -308,6 +324,7 @@ def change_data_order(request, id):
 @api_view(["PATCH"])
 def revoke_order(request,id):
     order = Order.objects.get(id = id)
+    motorizado = order.motorizado
     data = {"motorizado":None,
             "state":1,}
     serializer = OrderSerializer(order,data = data, partial=True)
@@ -317,7 +334,18 @@ def revoke_order(request,id):
         'message': 'Se ha revocado su orden',
         'code': 2
     }
-    lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
+    #lista_regis=['fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e','egqWrJv4Tg-qLWfxVTs-97:APA91bF14OiLvQzvLwZdyoZ5ccgKYvjNNaIKgKHlMxp6tyMwoThRuRV911lnQgqcDkD9VGDKKUbpWiiMMDgLRcI6FRXmCVMqE3cZGnLDNdZsPffPPp0K5BrGHXTWAC_6IsMXAKdypAhE']
+    devices = MotDeviceRegister.objects.filter(idMot = motorizado)
+    lista_regis = []
+    for device in devices:
+        lista_regis.append(device.idDevice)
+    prueba =messaging.MulticastMessage(
+        data={
+            'title': 'Orden revocada',
+            'body': json.dumps(dataSended, separators=(',',':')),
+        },
+        tokens=lista_regis
+    )
     # prueba =messaging.MulticastMessage(
     #     tokens=lista_regis,
     #     notification=messaging.Notification(
@@ -326,38 +354,38 @@ def revoke_order(request,id):
     #         'body': json.dumps(dataSended, separators=(',',':')),
     #     }
     # ))
-    messa=messaging.Message(
-        # data={
-        #     'title': 'Orden revocada',
-        #     'body': json.dumps(dataSended, separators=(',',':')),
-        # },
-        notification=messaging.Notification(
-            title='Orden revocada',
-            body='Orden revocada',
-            icon='https://goo.gl/Fz9nrQ',
-            click_action='https://goo.gl/Fz9nrQ'
-        ),
-        android=messaging.AndroidConfig(
-        ttl=datetime.timedelta(seconds=3600),
-        priority='normal',
-        notification=messaging.AndroidNotification(
-            icon='stock_ticker_update',
-            color='#f45342',
-            priority='high',
-        ),
-    ),
-    apns=messaging.APNSConfig(
-        payload=messaging.APNSPayload(
-            aps=messaging.Aps(badge=42),
-        ),
-    ),
-        token='fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e'
-    )
-    response = messaging.send(messa)
-    print(response)
-    return Response(status=status.HTTP_200_OK, data = serializer.data)
-    # respues=messaging.send_multicast(prueba)
-    # print ("repsuesta",respues)
+    # messa=messaging.Message(
+    #     # data={
+    #     #     'title': 'Orden revocada',
+    #     #     'body': json.dumps(dataSended, separators=(',',':')),
+    #     # },
+    #     notification=messaging.Notification(
+    #         title='Orden revocada',
+    #         body='Orden revocada',
+    #         icon='https://goo.gl/Fz9nrQ',
+    #         click_action='https://goo.gl/Fz9nrQ'
+    #     ),
+    #     android=messaging.AndroidConfig(
+    #     ttl=datetime.timedelta(seconds=3600),
+    #     priority='normal',
+    #     notification=messaging.AndroidNotification(
+    #         icon='stock_ticker_update',
+    #         color='#f45342',
+    #         priority='high',
+    #     ),
+    # ),
+    # apns=messaging.APNSConfig(
+    #     payload=messaging.APNSPayload(
+    #         aps=messaging.Aps(badge=42),
+    #     ),
+    # ),
+    #     token='fr5MWLf3TrW1Q0XR2Oij8R:APA91bGkGZsB3JEaaxS_xmJ1uOQi8hvVt2Mltparpym2PvO2tXZeaeIqt7JAVT3ImC9__Capcck9pRxfTRDOJdXnlYhAzhF_iXqFiJdB7e37rYympmlQXZR8AaeHQiRTkxI56f1t_00e'
+    # )
+    # response = messaging.send(messa)
+    # print(response)
+    # return Response(status=status.HTTP_200_OK, data = serializer.data)
+    respues=messaging.send_multicast(prueba)
+    print ("repsuesta",respues)
     return Response(status = status.HTTP_200_OK, data = serializer.data)
 
 
