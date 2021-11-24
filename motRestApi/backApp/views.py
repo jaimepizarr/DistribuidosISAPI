@@ -449,7 +449,7 @@ def get_mot_orders_active(request,id):
 @api_view(["GET"])
 def get_mot_orders_assigned(request,id):
     motorizado = Motorizado.objects.get(user_id = id)
-    orders = Order.objects.filter(motorizado = motorizado).filter(state=2) #Retornar 2,3,4,5
+    orders = Order.objects.filter(motorizado = motorizado).filter(state__in=[2,3,4,5]) #Retornar 2,3,4,5
     if len(orders):
         serializer = OrderAllSerializer(orders, many=True)
         return Response(status = status.HTTP_200_OK, data = serializer.data)
@@ -514,7 +514,9 @@ def orders_by_dates(request):
 @api_view(["GET"])
 def get_mot_location(request,id):
     order = Order.objects.get(id = id)
-    if order.state in (1,2,3):
+    if order.state == 1:
+        return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden está en espera de ser asignada"})
+    if order.state in (2,3):
         return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden aún no está siendo recogida"})
     if order.state in (4,5):
         motorizado = order.motorizado
