@@ -514,7 +514,9 @@ def orders_by_dates(request):
 @api_view(["GET"])
 def get_mot_location(request,id):
     order = Order.objects.get(id = id)
-    if order.state in (1,2,3):
+    if order.state == 1:
+        return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden está en espera de ser asignada"})
+    if order.state in (2,3):
         return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden aún no está siendo recogida"})
     if order.state in (4,5):
         motorizado = order.motorizado
