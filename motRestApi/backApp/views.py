@@ -88,6 +88,10 @@ class UserRetrieveView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserRetrieveSerializer
 
+class OperadorRetrieveView(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.filter(is_active=True,is_operador=True)
+    serializer_class = UserRetrieveSerializer
+
 class LocalRegistrationView(APIView):
     parser_classes= [MultiPartParser, FormParser]
 
