@@ -284,7 +284,7 @@ class Order(models.Model):
 
 class OrderComments(models.Model):
     comment = models.TextField("Comments about the delivery of the order")
-    grade = models.FloatField("Delivery grading")
+    grade = models.FloatField("Delivery grading", null=True)
     idOrder = models.ForeignKey(Order, on_delete=models.CASCADE)
 
 class MotDeviceRegister(models.Model):

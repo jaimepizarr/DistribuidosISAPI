@@ -1,6 +1,6 @@
 /motRestApi/.python-version
 /motRestApi/motRestApi/__pycache__
 /motRestApi/backApp/__pycache__
-/motRestApi/backApp/migrations
+/motRestApi/backApp/migrations/__pycache__
 /motRestApi/frontend/__pycache__
 /motRestApi/frontend/migrations/__pycache__
