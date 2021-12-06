@@ -2,7 +2,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, OperadorRetrieveView, SuperUser, UserRetrieveView, UserSignUp,OrderRetrieveView
+from .views import LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, OperadorRetrieveView, OrderCommentsView, SuperUser, UserRetrieveView, UserSignUp,OrderRetrieveView
 
 from .views import UserSignUp, get_models
 from backApp import views
@@ -14,6 +14,7 @@ router.register("orders",OrderRetrieveView)
 router.register("mot_to_assign",MotToAssignView)
 router.register("user",UserRetrieveView)
 router.register("operadores",OperadorRetrieveView)
+router.register("order/comments",OrderCommentsView)
 
 
 urlpatterns = [
@@ -53,4 +54,5 @@ urlpatterns = [
     path('orders_by_date', views.orders_by_dates),
     path('order/location/<int:id>',views.get_mot_location),
     path('motdevice/register', views.register_motdevice),
+    #path('getDistance', views.get_distance),
 ]

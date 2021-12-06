@@ -8,7 +8,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location, MotDeviceRegister
+from backApp.models import ColorVehicle, Local, User,Motorizado, Vehicle, TypeVehicle,ModelsVehicle,Order,Client,Location, MotDeviceRegister, OrderComments
 from backApp.serializers import *
 from rest_framework.response import Response
 from rest_framework import status
@@ -178,6 +178,10 @@ class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderAllSerializer
 
+class OrderCommentsView(viewsets.ModelViewSet):
+    queryset = OrderComments.objects.all()
+    serializer_class = OrderCommentsSerializer
+
 
 @api_view(['GET'])
 def get_colors(request):
@@ -238,24 +242,26 @@ def post_order(request):
     destiny = Location.objects.get_or_create(latitude=req_location["latitude"],
                                             longitude=req_location["longitude"],
                                             reference=req_location["reference"],
-                                            defaults=req_location)
+                                            defaults=req_location)[0]
     #The following code is how the distance and duration should be gotten from google api
 
-    # local = Local.objects.get(ruc=req.get("local"))
-    # local_location = local.location_id
-    #origin = local_location.longitude, local_location.latitude
-    #destination = destiny.longitude, destiny.latitude
-    # distance_matrix = json.load(getDistance(origin,destination))
-    # distance = distance_matrix["rows"][0]["elements"][0]["distance"]
-    # duration = distance_matrix["rows"][0]["elements"][0]["duration"]
+    local = Local.objects.get(ruc=req.get("local"))
+    local_location = local.location_id
+    # origin = local_location.longitude, local_location.latitude
+    # destination = destiny.longitude, destiny.latitude
+    # distance_matrix = getDistance(origin,destination)
+    # distance = distance_matrix["rows"][0]["elements"][0]["distance"]["text"]
+    # duration = distance_matrix["rows"][0]["elements"][0]["duration"]["text"]
+    # print(distance,duration)
 
     req["client"] = client[0].id
-    req["destiny_loc"] = destiny[0].id
+    req["destiny_loc"] = destiny.id
     req["state"] = 1
     order = OrderSerializer(data = req)
     order.is_valid(raise_exception=True)
     order.save()
-    return Response(data=order.data)
+    # print(order.data)
+    return Response(data=order.data, status=status.HTTP_201_CREATED)
 
 def sendPushNotification(title,message,code,idOrder,tokens):
     dataObject={
@@ -310,7 +316,18 @@ def assign_order(request, id):
     sendPushNotification('Nueva orden','Se le ha asignado una nueva orden',1,id,lista_regis)
     return Response(status=status.HTTP_200_OK, data = serializer.data)
 
-
+@api_view(["GET"])
+def get_distance(request):
+    origin = request.GET.get("origin")
+    print(request.GET)
+    print(origin)
+    destination = request.GET.get("destination")
+    origin = origin.split(",")
+    destination = destination.split(",")
+    origin = (origin[0],origin[1])
+    destination = (destination[0],destination[1])
+    distance_matrix = json.dumps(getDistance(origin,destination))
+    return JsonResponse(distance_matrix, safe=False)
 
 def getDistance(origin,destination):
     google_key = settings.GOOGLE_API_KEY
@@ -319,6 +336,7 @@ def getDistance(origin,destination):
     headers = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
+    print(response.text)
 
     return response.json()
 
