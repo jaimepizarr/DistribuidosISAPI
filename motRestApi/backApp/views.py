@@ -552,3 +552,8 @@ def get_mot_location(request,id):
             return Response(status = status.HTTP_400_BAD_REQUEST, data = [])
     if order.state == 6:
         return Response(status = status.HTTP_204_NO_CONTENT, data = {"description":"La orden ya ha terminado"})
+
+class LocalKmViewSet(viewsets.ModelViewSet):
+    queryset = LocalKM.objects.all()
+    serializer_class = LocalKmSerializer
+

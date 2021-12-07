@@ -7,7 +7,7 @@ from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
 from rest_framework.serializers import ModelSerializer, Serializer
-from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle,Phone, PhoneUser,MotDeviceRegister, OrderComments
+from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle,Phone, PhoneUser,MotDeviceRegister, OrderComments, LocalKM, Map, Sector, LocalSector
 
 
 class ColorVehicleSerializer(ModelSerializer):
@@ -220,4 +220,24 @@ class MotDeviceRegisterSerializer(ModelSerializer):
 class OrderCommentsSerializer(ModelSerializer):
     class Meta:
         model = OrderComments
+        fields = "__all__"
+
+class LocalKmSerializer(ModelSerializer):
+    class Meta:
+        model = LocalKM
+        fields = "__all__"
+
+class MapSerializer(ModelSerializer):
+    class Meta:
+        model = Map
+        fields = "__all__"
+
+class SectorSerializer(ModelSerializer):
+    class Meta:
+        model = Sector
+        fields = "__all__"
+
+class LocalSectorSerializer(ModelSerializer):
+    class Meta:
+        model = LocalSector
         fields = "__all__"
