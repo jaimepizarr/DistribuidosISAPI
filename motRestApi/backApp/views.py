@@ -556,4 +556,34 @@ def get_mot_location(request,id):
 class LocalKmViewSet(viewsets.ModelViewSet):
     queryset = LocalKM.objects.all()
     serializer_class = LocalKmSerializer
+    lookup_field = 'local'
 
+# class LocalKmViewSet(viewsets.ViewSet):
+#     def list(self, request):
+#         queryset = LocalKM.objects.all()
+#         serializer_class = LocalKmSerializer(queryset, many=True)
+#         return Response(status = status.HTTP_200_OK, data = serializer_class.data)
+    
+#     def retrieve(self, request, pk=None):
+#         print(pk)
+#         queryset = LocalKM.objects.filter(local=pk)
+#         if queryset:
+#             serializer_class = LocalKmSerializer(queryset[0])
+#             return Response(status = status.HTTP_200_OK, data = serializer_class.data)
+#         else:
+#             return Response(status = status.HTTP_204_NO_CONTENT, data = [])
+    
+#     def create(self, request):
+#         serializer = LocalKmSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(status = status.HTTP_201_CREATED, data = serializer.data)
+#         return Response(status = status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+
+#     def partial_update(self, request, pk=None):
+#         instance = LocalKM.objects.filter(local=pk)
+#         serializer = LocalKmSerializer(instance, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(status = status.HTTP_200_OK, data = serializer.data)
+#         return Response(status = status.HTTP_400_BAD_REQUEST, data = serializer.errors)

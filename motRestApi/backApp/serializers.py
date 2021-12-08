@@ -226,6 +226,7 @@ class LocalKmSerializer(ModelSerializer):
     class Meta:
         model = LocalKM
         fields = "__all__"
+        lookup_field  = "local"
 
 class MapSerializer(ModelSerializer):
     class Meta:

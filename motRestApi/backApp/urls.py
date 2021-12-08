@@ -15,7 +15,7 @@ router.register("mot_to_assign",MotToAssignView)
 router.register("user",UserRetrieveView)
 router.register("operadores",OperadorRetrieveView)
 router.register("order/comments",OrderCommentsView)
-router.register("local/precios/porKm",LocalKmViewSet)
+router.register(r"local/precios/porKm",LocalKmViewSet)
 
 
 urlpatterns = [
