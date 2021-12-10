@@ -110,14 +110,14 @@ class MotRegistComments(models.Model):
                               on_delete=models.SET_NULL)
 
 
-class Map(models.Model):
-    map_name = models.CharField("Name of the table map.", max_length=15)
+# class Map(models.Model):
+#     map_name = models.CharField("Name of the table map.", max_length=15)
 
 
 class Sector(models.Model):
     sector_name = models.CharField("Name of the sector", max_length=15)
     limits = models.TextField("Coordinates defining the limits of this sector")
-    map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
+    # map_id = models.ForeignKey(Map, on_delete=models.CASCADE)
 
 class LocalManager(models.Manager):
     def create_local(self,ruc,password,name,email,logo_img,location_id,admin):
@@ -138,6 +138,7 @@ class Local(models.Model):
         "Logo image", upload_to="images/Locals/logos", null=True, blank=True)
     reg_date = models.DateField(auto_now_add=True,null=True,blank=True)
     admin = models.ForeignKey(User, on_delete=models.CASCADE)
+    nombre_mapa = models.CharField("Name of the map", max_length=20, null=True, blank=True)
 
     objects = LocalManager()
 

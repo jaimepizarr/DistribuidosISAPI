@@ -18,6 +18,7 @@ router.register("order/comments",OrderCommentsView)
 router.register(r"local/precios/porKm",LocalKmViewSet)
 
 
+
 urlpatterns = [
     path('user_exists',views.user_exists),
     path('user/register',UserSignUp.as_view()),
@@ -55,5 +56,5 @@ urlpatterns = [
     path('orders_by_date', views.orders_by_dates),
     path('order/location/<int:id>',views.get_mot_location),
     path('motdevice/register', views.register_motdevice),
-    #path('getDistance', views.get_distance),
+    path('local/precios/porSectores', views.MapView.as_view()),
 ]

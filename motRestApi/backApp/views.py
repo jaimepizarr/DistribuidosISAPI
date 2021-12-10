@@ -22,6 +22,7 @@ from django.conf import settings
 import requests
 import firebase_admin
 from firebase_admin import credentials, firestore, messaging
+import ast
 
 class SuperUser(APIView):
 
@@ -181,6 +182,7 @@ class OrderRetrieveView(viewsets.ReadOnlyModelViewSet):
 class OrderCommentsView(viewsets.ModelViewSet):
     queryset = OrderComments.objects.all()
     serializer_class = OrderCommentsSerializer
+    lookup_field = 'idOrder'
 
 
 @api_view(['GET'])
@@ -558,32 +560,66 @@ class LocalKmViewSet(viewsets.ModelViewSet):
     serializer_class = LocalKmSerializer
     lookup_field = 'local'
 
-# class LocalKmViewSet(viewsets.ViewSet):
-#     def list(self, request):
-#         queryset = LocalKM.objects.all()
-#         serializer_class = LocalKmSerializer(queryset, many=True)
-#         return Response(status = status.HTTP_200_OK, data = serializer_class.data)
-    
-#     def retrieve(self, request, pk=None):
-#         print(pk)
-#         queryset = LocalKM.objects.filter(local=pk)
-#         if queryset:
-#             serializer_class = LocalKmSerializer(queryset[0])
-#             return Response(status = status.HTTP_200_OK, data = serializer_class.data)
-#         else:
-#             return Response(status = status.HTTP_204_NO_CONTENT, data = [])
-    
-#     def create(self, request):
-#         serializer = LocalKmSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(status = status.HTTP_201_CREATED, data = serializer.data)
-#         return Response(status = status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+# class LocalSectorViewSet(viewsets.ModelViewSet):
+#     queryset = LocalSector.objects.all()
+#     serializer_class = LocalSectorSerializer
+#     lookup_field = 'local'
 
-#     def partial_update(self, request, pk=None):
-#         instance = LocalKM.objects.filter(local=pk)
-#         serializer = LocalKmSerializer(instance, data=request.data, partial=True)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(status = status.HTTP_200_OK, data = serializer.data)
-#         return Response(status = status.HTTP_400_BAD_REQUEST, data = serializer.errors)
+def saveNombreMapa(map_name,ruc):
+        local_serializer = LocalSerializer(Local.objects.get(ruc = ruc), data = {"nombre_mapa":map_name}, partial=True)
+        local_serializer.is_valid(raise_exception=True)
+        local_serializer.save()
+
+def createSector(sector_new,coordenadas_new,ruc,price):
+    data_sector = {"sector_name":sector_new,
+                    "limits":str(coordenadas_new)}
+    serializer = SectorSerializer(data=data_sector)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    id_sector = serializer.data.get("id")
+    data_local_sector = {"local":ruc, "sector":id_sector,"price":price}
+    serializer_local_sector = LocalSectorSerializer(data=data_local_sector)
+    serializer_local_sector.is_valid(raise_exception=True)
+    serializer_local_sector.save()
+
+
+class MapView(APIView):
+
+    def post(self, request, format=None):
+        entry = request.data
+        ruc = entry.get("ruc")
+        map_name = entry.get("name")
+        d_sectores = entry.get("sectores")
+        for sector_new, d_sector in d_sectores.items():
+            price = d_sector.get("price")
+            limits_new = d_sector.get("limits")
+            coordenadas_new = [(i["latitude"],i["longitude"]) for i in limits_new]
+            sectors_all = Sector.objects.all()
+            if len(sectors_all)==0:
+                createSector(sector_new,coordenadas_new,ruc,price)
+                saveNombreMapa(map_name,ruc)
+            if len(sectors_all) > 0:
+                sector_exist = False
+                for existing_sec in sectors_all:
+                    limits = ast.literal_eval(existing_sec.limits)
+                    print(set(coordenadas_new),set(limits))
+                    if set(coordenadas_new) == set(limits) and existing_sec.sector_name == sector_new:
+                        id_sector = Sector.objects.get(limits = existing_sec.limits,).id
+                        data_local_sector = {"local":ruc, "sector":id_sector,"price":price}
+                        serializer_local_sector = LocalSectorSerializer(data=data_local_sector)
+                        serializer_local_sector.is_valid(raise_exception=True)
+                        serializer_local_sector.save()
+                        saveNombreMapa(map_name,ruc)
+                        sector_exist = True
+                if not sector_exist:
+                    createSector(sector_new,coordenadas_new,ruc,price)
+                    saveNombreMapa(map_name,ruc)
+        return Response(status = status.HTTP_201_CREATED, data = request.data)
+
+    # def get(self, request, format=None):
+    #     local_sector = LocalSector.objects.all()
+    #     serializer = LocalSectorRetrieveSerializer(local_sector, many=True)
+    #     return Response(status = status.HTTP_200_OK, data = serializer.data)
+
+# Al momento de asignar, sacar el tiempo estimado
+# Modificar el create order
