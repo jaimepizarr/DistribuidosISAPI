@@ -565,10 +565,15 @@ class LocalKmViewSet(viewsets.ModelViewSet):
 #     serializer_class = LocalSectorSerializer
 #     lookup_field = 'local'
 
-def saveNombreMapa(map_name,ruc):
-        local_serializer = LocalSerializer(Local.objects.get(ruc = ruc), data = {"nombre_mapa":map_name}, partial=True)
-        local_serializer.is_valid(raise_exception=True)
-        local_serializer.save()
+def saveNombreMapa(ruc):
+    local = Local.objects.get(ruc = ruc)
+    nombre = local.name
+    mapa = "Mapa_"+nombre
+    local_serializer = LocalSerializer(local, data = {"nombre_mapa":mapa}, partial=True)
+    local_serializer.is_valid(raise_exception=True)
+    local_serializer.save()
+    print(local_serializer.data)
+
 
 def createSector(sector_new,coordenadas_new,ruc,price):
     data_sector = {"sector_name":sector_new,
@@ -588,7 +593,6 @@ class MapView(APIView):
     def post(self, request, format=None):
         entry = request.data
         ruc = entry.get("ruc")
-        map_name = entry.get("name")
         d_sectores = entry.get("sectores")
         for sector_new, d_sector in d_sectores.items():
             price = d_sector.get("price")
@@ -597,8 +601,8 @@ class MapView(APIView):
             sectors_all = Sector.objects.all()
             if len(sectors_all)==0:
                 createSector(sector_new,coordenadas_new,ruc,price)
-                saveNombreMapa(map_name,ruc)
-            if len(sectors_all) > 0:
+                saveNombreMapa(ruc)
+            else:
                 sector_exist = False
                 for existing_sec in sectors_all:
                     limits = ast.literal_eval(existing_sec.limits)
@@ -609,17 +613,49 @@ class MapView(APIView):
                         serializer_local_sector = LocalSectorSerializer(data=data_local_sector)
                         serializer_local_sector.is_valid(raise_exception=True)
                         serializer_local_sector.save()
-                        saveNombreMapa(map_name,ruc)
+                        saveNombreMapa(ruc)
                         sector_exist = True
                 if not sector_exist:
                     createSector(sector_new,coordenadas_new,ruc,price)
-                    saveNombreMapa(map_name,ruc)
+                    saveNombreMapa(ruc)
         return Response(status = status.HTTP_201_CREATED, data = request.data)
 
-    # def get(self, request, format=None):
-    #     local_sector = LocalSector.objects.all()
-    #     serializer = LocalSectorRetrieveSerializer(local_sector, many=True)
-    #     return Response(status = status.HTTP_200_OK, data = serializer.data)
+    
+
+    def get(self, request, format=None):
+        local_sector = LocalSector.objects.all()
+        serializer = LocalSectorRetrieveSerializer(local_sector, many=True)
+        L_sectores = serializer.data
+        d_mapas = {}
+        for d_sectores in L_sectores:
+            l_limites = ast.literal_eval(d_sectores.get("sector").get("limits"))
+            l_limites = [{"latitude":i[0],"longitude":i[1]} for i in l_limites]
+            local = d_sectores.get("local")
+            nombre_mapa = local.get("nombre_mapa")
+            ruc = local.get("ruc")
+            sector = d_sectores["sector"]
+            price = d_sectores["price"]
+            d_mapas.setdefault(nombre_mapa,{})
+            d_mapas[nombre_mapa].setdefault("ruc",ruc)
+            d_mapas[nombre_mapa].setdefault("sectores",{})
+            d_mapas[nombre_mapa]["sectores"][sector["sector_name"]] = {"limits":l_limites,"price":price}
+            print(d_mapas)
+            
+        return Response(status = status.HTTP_200_OK, data = d_mapas)
 
 # Al momento de asignar, sacar el tiempo estimado
 # Modificar el create order
+
+# {
+#     "id": 20,
+#     "sector": {
+#       "id": 24,
+#       "sector_name": "sector_name1",
+#       "limits": "[(-2.06764, -79.915628), (-2.073837, -79.925853)]"
+#     },
+#     "local": {
+#       "ruc": "09814457754001",
+#       "nombre_mapa": null
+#     },
+#     "price": 0
+#   },

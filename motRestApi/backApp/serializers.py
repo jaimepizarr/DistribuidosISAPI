@@ -155,7 +155,7 @@ class LocalSerializer(ModelSerializer):
     location_id = LocationSerializer(many=False)
     class Meta:
         model = Local
-        fields = ["ruc","name","email","logo_img","location_id"]
+        fields = ["ruc","name","email","logo_img","location_id","nombre_mapa"]
 
 class ClienteSerializer(ModelSerializer):
     class Meta:
@@ -243,8 +243,14 @@ class LocalSectorSerializer(ModelSerializer):
         model = LocalSector
         fields = "__all__"
 
+class LocalMapNameSerializer(ModelSerializer):
+    class Meta:
+        model = Local
+        fields = ["ruc","nombre_mapa"]
+
 class LocalSectorRetrieveSerializer(ModelSerializer):
     sector = SectorSerializer(many=False)
+    local = LocalMapNameSerializer(many=False)
     class Meta:
         model = LocalSector
         fields = "__all__"
