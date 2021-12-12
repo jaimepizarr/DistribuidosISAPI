@@ -57,4 +57,6 @@ urlpatterns = [
     path('order/location/<int:id>',views.get_mot_location),
     path('motdevice/register', views.register_motdevice),
     path('local/precios/porSectores', views.MapView.as_view()),
+    path('local/precios/porKm', views.postLocalKm),
+    path('local/precios/porKm/<str:id>', views.updateLocalKm)
 ]

@@ -222,11 +222,19 @@ class OrderCommentsSerializer(ModelSerializer):
         model = OrderComments
         fields = "__all__"
 
+class LocalNameSerializer(ModelSerializer):
+    class Meta:
+        model = Local
+        fields = ["ruc","name"]
+
 class LocalKmSerializer(ModelSerializer):
     class Meta:
         model = LocalKM
         fields = "__all__"
         lookup_field  = "local"
+class LocalKmRetrieveSerializer(LocalKmSerializer):
+    local = LocalNameSerializer(many=False)
+
 
 # class MapSerializer(ModelSerializer):
 #     class Meta:
