@@ -58,5 +58,6 @@ urlpatterns = [
     path('motdevice/register', views.register_motdevice),
     path('local/precios/porSectores', views.MapView.as_view()),
     path('local/precios/porKm', views.postLocalKm),
-    path('local/precios/porKm/<str:id>', views.updateLocalKm)
+    path('local/precios/porKm/<str:id>', views.updateLocalKm),
+    path('getDistance', views.get_distance)
 ]
