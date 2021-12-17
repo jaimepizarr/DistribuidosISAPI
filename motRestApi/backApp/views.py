@@ -3,6 +3,7 @@ from functools import partial
 import re
 from typing import Dict
 from django.db.models import query
+from drf_yasg import openapi
 from backApp.permissions import LocalAuthenticated
 from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
@@ -23,6 +24,7 @@ import requests
 import firebase_admin
 from firebase_admin import credentials, firestore, messaging
 import ast
+from drf_yasg.utils import swagger_auto_schema
 
 
 class SuperUser(APIView):
@@ -309,10 +311,14 @@ def assign_order(request, id):
     else:
         start_time = datetime.now()
         motorizado = order.motorizado
-        mot_ser = MotSerializer(motorizado)
+        
         db = firestore.client()
+        ruc = req["motorizado"]
+        print(ruc)
         origin = db.collection("motorizados").document(
-            str(mot_ser.data.get("user_id"))).get()
+            str(ruc)).get()
+        print(origin.exists)
+        print(origin.to_dict())
         if origin.exists:
             origin = origin.to_dict()
             origin  = (origin.get("lat"), origin.get("lng")) 
@@ -335,9 +341,9 @@ def assign_order(request, id):
     total_duration = first_duration + second_duration
     estimated_arriv_time = start_time + timedelta(seconds=total_duration) + timedelta(minutes=3)
 
-    req["arriv_estimated_time"] = estimated_arriv_time
-    req["mot_assigned_time"] = datetime.now()
-
+    req["arriv_estimated_time"] = estimated_arriv_time.isoformat()
+    req["mot_assigned_time"] = datetime.now().isoformat()
+    print(req["arriv_estimated_time"])
     motorizado = Motorizado.objects.get(user_id=req["motorizado"])
     mot_serializer = MotSerializer(
         motorizado, data={"is_busy": True}, partial=True)
@@ -374,7 +380,10 @@ def assign_order(request, id):
     return Response(status=status.HTTP_200_OK, data=serializer.data)
 
 
+locations_param = openapi.Parameter(
+    'origin', in_=openapi.IN_QUERY, description="Origin location", type=openapi.TYPE_STRING)
 @api_view(["GET"])
+@swagger_auto_schema(manual_parameters=[locations_param])
 def get_distance(request):
     origin = request.GET.get("origin")
     print(request.GET)
@@ -745,6 +754,33 @@ class MapView(APIView):
             print(d_mapas)
 
         return Response(status=status.HTTP_200_OK, data=d_mapas)
+    
+@api_view(["GET"])
+def getSectorByLocal(request, id):
+    local_sector = LocalSector.objects.filter(local=id)
+    serializer = LocalSectorRetrieveSerializer(local_sector, many=True)
+    L_sectores = serializer.data
+    d_mapas = {}
+    for d_sectores in L_sectores:
+        l_limites = ast.literal_eval(
+            d_sectores.get("sector").get("limits"))
+        l_limites = [{"latitude": i[0], "longitude":i[1]}
+                        for i in l_limites]
+        local = d_sectores.get("local")
+        nombre_mapa = local.get("nombre_mapa")
+        ruc = local.get("ruc")
+        sector = d_sectores["sector"]
+        price = d_sectores["price"]
+        d_mapas.setdefault(nombre_mapa, {})
+        d_mapas[nombre_mapa].setdefault("ruc", ruc)
+        d_mapas[nombre_mapa].setdefault("sectores", {})
+        d_mapas[nombre_mapa]["sectores"][sector["sector_name"]] = {
+            "limits": l_limites, "price": price}
+        print(d_mapas)
+
+    return Response(status=status.HTTP_200_OK, data=d_mapas)  
+
+    
 
 # Al momento de asignar, sacar el tiempo estimado
 # Modificar el create order
