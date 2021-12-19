@@ -332,9 +332,14 @@ def assign_order(request, id):
     
     first_dist_matrix = getDistance(origin, local_location)
     print(first_dist_matrix)
+    if first_dist_matrix["rows"][0]["elements"][0]["status"] == "ZERO_RESULTS":
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": f"No se pudo calcular la distancia entre el origen:{origin} y el local:{local_location} "})
     first_distance = first_dist_matrix["rows"][0]["elements"][0]["distance"]["value"]
     first_duration = first_dist_matrix["rows"][0]["elements"][0]["duration"]["value"]
     second_dist_matrix = getDistance(local_location, destination)
+    if second_dist_matrix["rows"][0]["elements"][0]["status"] == "ZERO_RESULTS":
+        return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": f"No se pudo calcular la distancia entre el local:{local_location} y su destino:{destination}"})
+    print(second_dist_matrix)
     second_distance = second_dist_matrix["rows"][0]["elements"][0]["distance"]["value"]
     second_duration = second_dist_matrix["rows"][0]["elements"][0]["duration"]["value"]
 
