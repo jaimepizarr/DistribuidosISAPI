@@ -78,6 +78,12 @@ class UserSignUp(APIView):
         serializer.save()
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
+@api_view(['POST'])
+def add_user_comments(request,id):
+    db = firestore.client()
+    data = request.data
+    db.collection('mot_data_comments').document(str(id)).set(data)
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def register_motdevice(request):
@@ -382,24 +388,8 @@ def assign_order(request, id):
     # # print(serializer.data)
     sendPushNotification(
         'Nueva orden', 'Se le ha asignado una nueva orden', 1, id, lista_regis)
-    return Response(status=status.HTTP_200_OK, data=serializer.data)
-
-
-locations_param = openapi.Parameter(
-    'origin', in_=openapi.IN_QUERY, description="Origin location", type=openapi.TYPE_STRING)
-@api_view(["GET"])
-@swagger_auto_schema(manual_parameters=[locations_param])
-def get_distance(request):
-    origin = request.GET.get("origin")
-    print(request.GET)
-    print(origin)
-    destination = request.GET.get("destination")
-    origin = origin.split(",")
-    destination = destination.split(",")
-    origin = (origin[0], origin[1])
-    destination = (destination[0], destination[1])
-    distance_matrix = json.dumps(getDistance(origin, destination))
-    return JsonResponse(distance_matrix, safe=False)
+    returnSerializer = OrderAssignReturnSerializer(order)
+    return Response(status=status.HTTP_200_OK, data=returnSerializer.data)
 
 
 def getDistance(origin, destination):
@@ -706,6 +696,8 @@ class MapView(APIView):
         entry = request.data
         ruc = entry.get("ruc")
         d_sectores = entry.get("sectores")
+        if type(d_sectores) == str:
+            d_sectores = ast.literal_eval(d_sectores)
         for sector_new, d_sector in d_sectores.items():
             price = d_sector.get("price")
             limits_new = d_sector.get("limits")
@@ -803,3 +795,20 @@ def getSectorByLocal(request, id):
 #     },
 #     "price": 0
 #   },
+
+
+# locations_param = openapi.Parameter(
+#     'origin', in_=openapi.IN_QUERY, description="Origin location", type=openapi.TYPE_STRING)
+# @api_view(["GET"])
+# @swagger_auto_schema(manual_parameters=[locations_param])
+# def get_distance(request):
+#     origin = request.GET.get("origin")
+#     print(request.GET)
+#     print(origin)
+#     destination = request.GET.get("destination")
+#     origin = origin.split(",")
+#     destination = destination.split(",")
+#     origin = (origin[0], origin[1])
+#     destination = (destination[0], destination[1])
+#     distance_matrix = json.dumps(getDistance(origin, destination))
+#     return JsonResponse(distance_matrix, safe=False)

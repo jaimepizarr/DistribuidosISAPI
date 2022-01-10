@@ -194,6 +194,8 @@ class OrderSerializer(ModelSerializer):
     #                                 **validated_data)
     #     return order
 
+class OrderAssignReturnSerializer(OrderSerializer):
+    operador = UserRetrieveSerializer(many=False)
 
 class OrderAllSerializer(OrderSerializer):
     local=LocalSerializer(many=False)
