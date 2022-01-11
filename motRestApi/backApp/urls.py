@@ -61,5 +61,5 @@ urlpatterns = [
     path('local/precios/porKm', views.postLocalKm),
     path('local/precios/porKm/<str:id>', views.updateLocalKm),
     #path('getDistance', views.get_distance)
-    path('user/data/comments/<int:id>', views.add_user_comments),
+    path('user/data/comments/<int:id>', views.UserComments.as_view()),
 ]

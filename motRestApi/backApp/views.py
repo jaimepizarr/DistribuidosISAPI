@@ -4,6 +4,7 @@ import re
 from typing import Dict
 from django.db.models import query
 from drf_yasg import openapi
+from rest_framework.utils.serializer_helpers import ReturnDict
 from backApp.permissions import LocalAuthenticated
 from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
@@ -78,12 +79,19 @@ class UserSignUp(APIView):
         serializer.save()
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
-@api_view(['POST'])
-def add_user_comments(request,id):
-    db = firestore.client()
-    data = request.data
-    db.collection('mot_data_comments').document(str(id)).set(data)
-    return Response(status=status.HTTP_200_OK)
+class UserComments(APIView):
+    def post(self, request, id):
+        db = firestore.client()
+        data = request.data
+        db.collection('mot_data_comments').document(str(id)).set(data)
+        return Response(status=status.HTTP_200_OK)
+    
+    def get(self, request, id):
+        db = firestore.client()
+        data = db.collection('mot_data_comments').document(str(id)).get().to_dict()
+        return Response(status=status.HTTP_200_OK, data=data)
+    
+
 
 @api_view(['POST'])
 def register_motdevice(request):
