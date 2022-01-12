@@ -193,6 +193,25 @@ def upd_mot(request, id):
 
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+def change_active_mode(id, is_active):
+    motorizado = User.objects.get(id=id)
+    data_ser = {"is_active": is_active}
+    serializer = UserSerializer(motorizado, data=data_ser, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        if is_active:
+            return Response(status=status.HTTP_200_OK, data={"message": "Motorizado activado"})
+        return Response(status=status.HTTP_200_OK, data={"message": "Motorizado desactivado"})
+
+    return Response(status=status.HTTP_400_BAD_REQUEST, data=[])
+
+@api_view(['PATCH'])
+def unactivate_mot(request, id):
+    return change_active_mode(id, False)
+
+@api_view(['PATCH'])
+def activate_mot(request, id):
+    return change_active_mode(id, True)
 
 @api_view(['GET'])
 def get_motorizados(request):

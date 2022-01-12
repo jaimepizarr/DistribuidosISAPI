@@ -62,4 +62,6 @@ urlpatterns = [
     path('local/precios/porKm/<str:id>', views.updateLocalKm),
     #path('getDistance', views.get_distance)
     path('user/data/comments/<int:id>', views.UserComments.as_view()),
+    path('motorizado/unactivate/<int:id>', views.unactivate_mot),
+    path('motorizado/activate/<int:id>', views.activate_mot),
 ]
