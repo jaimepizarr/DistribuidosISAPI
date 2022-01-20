@@ -74,7 +74,7 @@ class UserRetrieveSerializer(UserSerializer):
     home_loc=LocationSerializer(many=False,read_only = True)
     phones = PhoneUserRetrieveSerializer(read_only=True,many=True, source="phoneuser_set")
     class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ["phones"]
+        fields = UserSerializer.Meta.fields + ["phones","date_joined"]
     
 
 class VehicleSerializer(ModelSerializer):
@@ -155,7 +155,7 @@ class LocalSerializer(ModelSerializer):
     location_id = LocationSerializer(many=False)
     class Meta:
         model = Local
-        fields = ["ruc","name","email","logo_img","location_id","nombre_mapa"]
+        fields = ["ruc","name","email","logo_img","location_id","nombre_mapa","reg_date"]
 
 class ClienteSerializer(ModelSerializer):
     class Meta:
