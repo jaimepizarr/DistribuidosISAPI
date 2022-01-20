@@ -209,11 +209,11 @@ def change_active_mode(id, is_active):
     return Response(status=status.HTTP_400_BAD_REQUEST, data=[])
 
 @api_view(['PATCH'])
-def unactivate_mot(request, id):
+def unactivate_user(request, id):
     return change_active_mode(id, False)
 
 @api_view(['PATCH'])
-def activate_mot(request, id):
+def activate_user(request, id):
     return change_active_mode(id, True)
 
 @api_view(['GET'])

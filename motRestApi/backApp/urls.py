@@ -63,7 +63,7 @@ urlpatterns = [
     path('local/sector', views.deleteSector),
     #path('getDistance', views.get_distance)
     path('user/data/comments/<int:id>', views.UserComments.as_view()),
-    path('motorizado/unactivate/<int:id>', views.unactivate_mot),
-    path('motorizado/activate/<int:id>', views.activate_mot),
+    path('user/unactivate/<int:id>', views.unactivate_user),
+    path('user/activate/<int:id>', views.activate_user),
     path('client', ClientApiView.as_view())
 ]
