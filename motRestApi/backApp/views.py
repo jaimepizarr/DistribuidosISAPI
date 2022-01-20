@@ -108,7 +108,7 @@ def register_motdevice(request):
 
 
 class UserRetrieveView(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_active=True)
     serializer_class = UserRetrieveSerializer
 
 
@@ -171,14 +171,16 @@ class MotorizadoView(APIView):
 
 
 class MotorizadoUserView(viewsets.ReadOnlyModelViewSet):
-    queryset = Motorizado.objects.all()
+    users = User.objects.filter(is_active=True, is_motorizado=True)
+    queryset = Motorizado.objects.filter(user_id__in=users)
     serializer_class = MotUserSerializer
 
 
 class MotToAssignView(viewsets.ReadOnlyModelViewSet):
     queryset = Motorizado.objects.filter(user_id__is_motorizado=0,
                                          user_id__is_operador=0,
-                                         user_id__is_staff=0).all()
+                                         user_id__is_staff=0,
+                                         user_id__is_active=1).all()
     serializer_class = MotUserSerializer
 
 
@@ -558,7 +560,7 @@ def get_mot_orders(request, id):
 
 @api_view(["GET"])
 def get_mot_orders_active(request, id):
-    motorizado = Motorizado.objects.get(user_id=id)
+    motorizado = Motorizado.objects.filter(user_id=id, user_id__is_active=True)[0]
     orders = Order.objects.filter(
         motorizado=motorizado).filter(state__in=[3, 4, 5])
     if len(orders):
@@ -569,7 +571,7 @@ def get_mot_orders_active(request, id):
 
 @api_view(["GET"])
 def get_mot_orders_assigned(request, id):
-    motorizado = Motorizado.objects.get(user_id=id)
+    motorizado = Motorizado.objects.filter(user_id=id, user_id__is_active=True)[0]
     orders = Order.objects.filter(motorizado=motorizado).filter(
         state__in=[2, 3, 4, 5])  # Retornar 2,3,4,5
     if len(orders):
