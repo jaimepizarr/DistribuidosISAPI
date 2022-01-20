@@ -10,7 +10,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, Local, User, Motorizado, Vehicle, TypeVehicle, ModelsVehicle, Order, Client, Location, MotDeviceRegister, OrderComments
+from backApp.models import ColorVehicle, Local, User, Motorizado, Vehicle, TypeVehicle, ModelsVehicle, Order, Client, Location, MotDeviceRegister, OrderComments, ClientLocation
 from backApp.serializers import *
 from rest_framework.response import Response
 from rest_framework import mixins, status
@@ -26,6 +26,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore, messaging
 import ast
 from drf_yasg.utils import swagger_auto_schema
+
 
 
 class SuperUser(APIView):
@@ -302,7 +303,7 @@ def post_order(request):
                                              longitude=req_location["longitude"],
                                              reference=req_location["reference"],
                                              defaults=req_location)[0]
-    
+    ClientLocation.objects.get_or_create(client = client[0], location = destiny)
 
     req["client"] = client[0].id
     req["destiny_loc"] = destiny.id
@@ -816,8 +817,18 @@ def deleteSector(request):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND, data={"message": "Sector no encontrado, revise el id del local y/o sector"})
 
-    
+class ClientApiView(APIView):
 
+    def get(self, request, format=None):
+        client = Client.objects.all()
+        serializer = ClientRetrieveSerializer(client, many=True)
+        return Response(status=status.HTTP_200_OK, data = serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ClienteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
 # Al momento de asignar, sacar el tiempo estimado
 # Modificar el create order
 

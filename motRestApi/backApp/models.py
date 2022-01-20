@@ -225,6 +225,9 @@ class Client(models.Model):
     apellido = models.CharField("Client last name", max_length=50)
     email = models.EmailField("Client email", max_length=254, null=True)
 
+class ClientLocation(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
 class Phone(models.Model):
     pho_number = models.CharField(max_length=11)

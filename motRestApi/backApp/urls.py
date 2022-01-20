@@ -2,7 +2,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import LocalKmViewSet, LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, OperadorRetrieveView, OrderCommentsView, SuperUser, UserRetrieveView, UserSignUp,OrderRetrieveView
+from .views import ClientApiView, LocalKmViewSet, LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, OperadorRetrieveView, OrderCommentsView, SuperUser, UserRetrieveView, UserSignUp,OrderRetrieveView
 
 from .views import UserSignUp, get_models
 from backApp import views
@@ -65,4 +65,5 @@ urlpatterns = [
     path('user/data/comments/<int:id>', views.UserComments.as_view()),
     path('motorizado/unactivate/<int:id>', views.unactivate_mot),
     path('motorizado/activate/<int:id>', views.activate_mot),
+    path('client', ClientApiView.as_view())
 ]
