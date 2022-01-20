@@ -774,8 +774,7 @@ class MapView(APIView):
             d_mapas[nombre_mapa].setdefault("ruc", ruc)
             d_mapas[nombre_mapa].setdefault("sectores", {})
             d_mapas[nombre_mapa]["sectores"][sector["sector_name"]] = {
-                "limits": l_limites, "price": price}
-            print(d_mapas)
+                "limits": l_limites, "price": price, "id": sector["id"]}
 
         return Response(status=status.HTTP_200_OK, data=d_mapas)
     
@@ -799,10 +798,21 @@ def getSectorByLocal(request, id):
         d_mapas[nombre_mapa].setdefault("ruc", ruc)
         d_mapas[nombre_mapa].setdefault("sectores", {})
         d_mapas[nombre_mapa]["sectores"][sector["sector_name"]] = {
-            "limits": l_limites, "price": price}
-        print(d_mapas)
+            "limits": l_limites, "price": price, "id": sector["id"]}
 
     return Response(status=status.HTTP_200_OK, data=d_mapas)  
+
+
+@api_view(["DELETE"])
+#body: {"local": ruc
+#       "sector": id}
+def deleteSector(request):
+    localsector = LocalSector.objects.filter(local=request.data.get("local"), sector=request.data.get("sector"))
+    print(localsector)
+    if localsector:
+        return Response(status=status.HTTP_200_OK, data={"message": "Sector eliminado"})
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND, data={"message": "Sector no encontrado, revise el id del local y/o sector"})
 
     
 
