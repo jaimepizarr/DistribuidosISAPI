@@ -172,7 +172,7 @@ class MotorizadoView(APIView):
 
 
 class MotorizadoUserView(viewsets.ReadOnlyModelViewSet):
-    users = User.objects.filter(is_active=True, is_motorizado=True)
+    users = User.objects.filter(is_active=True)
     queryset = Motorizado.objects.filter(user_id__in=users)
     serializer_class = MotUserSerializer
 
