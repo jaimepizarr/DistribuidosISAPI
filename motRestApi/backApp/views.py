@@ -170,6 +170,12 @@ class MotorizadoView(APIView):
         vehicle.save()
         return Response(status=status.HTTP_200_OK, data=motorizado.data)
 
+    def get(self, request, format=None):
+        users = User.objects.filter(is_active=True, is_motorizado=True)
+        queryset = Motorizado.objects.filter(user_id__in=users)
+        serializer = MotUserSerializer(queryset, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+
 
 class MotorizadoUserView(viewsets.ReadOnlyModelViewSet):
     users = User.objects.filter(is_active=True)
