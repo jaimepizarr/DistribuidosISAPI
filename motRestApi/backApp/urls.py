@@ -2,7 +2,7 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import LocalKmViewSet, LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, OperadorRetrieveView, OrderCommentsView, SuperUser, UserRetrieveView, UserSignUp,OrderRetrieveView
+from .views import ClientApiView, LocalKmViewSet, LocalLoginView, LocalRegistrationView, MotToAssignView, MotorizadoUserView, MotorizadoView, OperadorRetrieveView, OrderCommentsView, SuperUser, UserRetrieveView, UserSignUp,OrderRetrieveView
 
 from .views import UserSignUp, get_models
 from backApp import views
@@ -24,6 +24,7 @@ urlpatterns = [
     path('user/register',UserSignUp.as_view()),
     path('user/<int:id>',UserSignUp.as_view()),
     path('user_admin/reg',SuperUser.as_view()),
+    path('motorizado',MotorizadoView.as_view()),
     path('motorizado',MotorizadoView.as_view()),
     path('motorizado/<int:id>',views.upd_mot),
     path('user/login',TokenObtainPairView.as_view()),
@@ -60,8 +61,10 @@ urlpatterns = [
     path('local/precios/porSectores/<str:id>', views.getSectorByLocal),
     path('local/precios/porKm', views.postLocalKm),
     path('local/precios/porKm/<str:id>', views.updateLocalKm),
+    path('local/sector', views.deleteSector),
     #path('getDistance', views.get_distance)
     path('user/data/comments/<int:id>', views.UserComments.as_view()),
-    path('motorizado/unactivate/<int:id>', views.unactivate_mot),
-    path('motorizado/activate/<int:id>', views.activate_mot),
+    path('user/unactivate/<int:id>', views.unactivate_user),
+    path('user/activate/<int:id>', views.activate_user),
+    path('client', ClientApiView.as_view())
 ]

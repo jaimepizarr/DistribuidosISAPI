@@ -10,7 +10,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, Local, User, Motorizado, Vehicle, TypeVehicle, ModelsVehicle, Order, Client, Location, MotDeviceRegister, OrderComments
+from backApp.models import ColorVehicle, Local, User, Motorizado, Vehicle, TypeVehicle, ModelsVehicle, Order, Client, Location, MotDeviceRegister, OrderComments, ClientLocation
 from backApp.serializers import *
 from rest_framework.response import Response
 from rest_framework import mixins, status
@@ -26,6 +26,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore, messaging
 import ast
 from drf_yasg.utils import swagger_auto_schema
+
 
 
 class SuperUser(APIView):
@@ -108,7 +109,7 @@ def register_motdevice(request):
 
 
 class UserRetrieveView(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.filter(is_active=True)
     serializer_class = UserRetrieveSerializer
 
 
@@ -169,16 +170,24 @@ class MotorizadoView(APIView):
         vehicle.save()
         return Response(status=status.HTTP_200_OK, data=motorizado.data)
 
+    def get(self, request, format=None):
+        users = User.objects.filter(is_active=True, is_motorizado=True)
+        queryset = Motorizado.objects.filter(user_id__in=users)
+        serializer = MotUserSerializer(queryset, many=True)
+        return Response(status=status.HTTP_200_OK, data=serializer.data)
+
 
 class MotorizadoUserView(viewsets.ReadOnlyModelViewSet):
-    queryset = Motorizado.objects.all()
+    users = User.objects.filter(is_active=True)
+    queryset = Motorizado.objects.filter(user_id__in=users)
     serializer_class = MotUserSerializer
 
 
 class MotToAssignView(viewsets.ReadOnlyModelViewSet):
     queryset = Motorizado.objects.filter(user_id__is_motorizado=0,
                                          user_id__is_operador=0,
-                                         user_id__is_staff=0).all()
+                                         user_id__is_staff=0,
+                                         user_id__is_active=1).all()
     serializer_class = MotUserSerializer
 
 
@@ -206,11 +215,11 @@ def change_active_mode(id, is_active):
     return Response(status=status.HTTP_400_BAD_REQUEST, data=[])
 
 @api_view(['PATCH'])
-def unactivate_mot(request, id):
+def unactivate_user(request, id):
     return change_active_mode(id, False)
 
 @api_view(['PATCH'])
-def activate_mot(request, id):
+def activate_user(request, id):
     return change_active_mode(id, True)
 
 @api_view(['GET'])
@@ -300,7 +309,7 @@ def post_order(request):
                                              longitude=req_location["longitude"],
                                              reference=req_location["reference"],
                                              defaults=req_location)[0]
-    
+    ClientLocation.objects.get_or_create(client = client[0], location = destiny)
 
     req["client"] = client[0].id
     req["destiny_loc"] = destiny.id
@@ -558,7 +567,7 @@ def get_mot_orders(request, id):
 
 @api_view(["GET"])
 def get_mot_orders_active(request, id):
-    motorizado = Motorizado.objects.get(user_id=id)
+    motorizado = Motorizado.objects.filter(user_id=id, user_id__is_active=True)[0]
     orders = Order.objects.filter(
         motorizado=motorizado).filter(state__in=[3, 4, 5])
     if len(orders):
@@ -569,7 +578,7 @@ def get_mot_orders_active(request, id):
 
 @api_view(["GET"])
 def get_mot_orders_assigned(request, id):
-    motorizado = Motorizado.objects.get(user_id=id)
+    motorizado = Motorizado.objects.filter(user_id=id, user_id__is_active=True)[0]
     orders = Order.objects.filter(motorizado=motorizado).filter(
         state__in=[2, 3, 4, 5])  # Retornar 2,3,4,5
     if len(orders):
@@ -774,8 +783,7 @@ class MapView(APIView):
             d_mapas[nombre_mapa].setdefault("ruc", ruc)
             d_mapas[nombre_mapa].setdefault("sectores", {})
             d_mapas[nombre_mapa]["sectores"][sector["sector_name"]] = {
-                "limits": l_limites, "price": price}
-            print(d_mapas)
+                "limits": l_limites, "price": price, "id": sector["id"]}
 
         return Response(status=status.HTTP_200_OK, data=d_mapas)
     
@@ -799,13 +807,34 @@ def getSectorByLocal(request, id):
         d_mapas[nombre_mapa].setdefault("ruc", ruc)
         d_mapas[nombre_mapa].setdefault("sectores", {})
         d_mapas[nombre_mapa]["sectores"][sector["sector_name"]] = {
-            "limits": l_limites, "price": price}
-        print(d_mapas)
+            "limits": l_limites, "price": price, "id": sector["id"]}
 
     return Response(status=status.HTTP_200_OK, data=d_mapas)  
 
-    
 
+@api_view(["DELETE"])
+#body: {"local": ruc
+#       "sector": id}
+def deleteSector(request):
+    localsector = LocalSector.objects.filter(local=request.data.get("local"), sector=request.data.get("sector"))
+    print(localsector)
+    if localsector:
+        return Response(status=status.HTTP_200_OK, data={"message": "Sector eliminado"})
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND, data={"message": "Sector no encontrado, revise el id del local y/o sector"})
+
+class ClientApiView(APIView):
+
+    def get(self, request, format=None):
+        client = Client.objects.all()
+        serializer = ClientRetrieveSerializer(client, many=True)
+        return Response(status=status.HTTP_200_OK, data = serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ClienteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED, data=serializer.data)
 # Al momento de asignar, sacar el tiempo estimado
 # Modificar el create order
 

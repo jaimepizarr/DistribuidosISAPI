@@ -7,7 +7,7 @@ from rest_framework import serializers
 from django.db.models.query import Prefetch
 from rest_framework import fields
 from rest_framework.serializers import ModelSerializer, Serializer
-from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle,Phone, PhoneUser,MotDeviceRegister, OrderComments, LocalKM, Sector, LocalSector
+from backApp.models import ColorVehicle, Local, Location, Order, TypeVehicle, User, Motorizado,Payment, Vehicle,Client, ModelsVehicle,Phone, PhoneUser,MotDeviceRegister, OrderComments, LocalKM, Sector, LocalSector, ClientLocation
 
 
 class ColorVehicleSerializer(ModelSerializer):
@@ -74,7 +74,7 @@ class UserRetrieveSerializer(UserSerializer):
     home_loc=LocationSerializer(many=False,read_only = True)
     phones = PhoneUserRetrieveSerializer(read_only=True,many=True, source="phoneuser_set")
     class Meta(UserSerializer.Meta):
-        fields = UserSerializer.Meta.fields + ["phones"]
+        fields = UserSerializer.Meta.fields + ["phones","date_joined"]
     
 
 class VehicleSerializer(ModelSerializer):
@@ -155,12 +155,24 @@ class LocalSerializer(ModelSerializer):
     location_id = LocationSerializer(many=False)
     class Meta:
         model = Local
-        fields = ["ruc","name","email","logo_img","location_id","nombre_mapa"]
+        fields = ["ruc","name","email","logo_img","location_id","nombre_mapa","reg_date"]
 
 class ClienteSerializer(ModelSerializer):
     class Meta:
         model = Client
         fields = "__all__"
+
+class ClientLocationSerializer(ModelSerializer):
+    location = LocationSerializer(many=False)
+    class Meta:
+        model = ClientLocation
+        fields = "__all__"
+
+class ClientRetrieveSerializer(ModelSerializer):
+    locations = ClientLocationSerializer(read_only=True,many=True, source="clientlocation_set")
+    class Meta:
+        model = Client
+        fields = ["id","id_number","name","apellido","email","locations"]
 
 class PaymentSerializer(ModelSerializer):
     class Meta:
