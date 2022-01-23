@@ -819,6 +819,7 @@ def deleteSector(request):
     localsector = LocalSector.objects.filter(local=request.data.get("local"), sector=request.data.get("sector"))
     print(localsector)
     if localsector:
+        localsector.delete()
         return Response(status=status.HTTP_200_OK, data={"message": "Sector eliminado"})
     else:
         return Response(status=status.HTTP_404_NOT_FOUND, data={"message": "Sector no encontrado, revise el id del local y/o sector"})
