@@ -176,6 +176,13 @@ class MotorizadoView(APIView):
         serializer = MotUserSerializer(queryset, many=True)
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
+@api_view(['GET'])
+def get_mot_unactivated(request):
+    users = User.objects.filter(is_active=False, is_motorizado=True)
+    queryset = Motorizado.objects.filter(user_id__in=users)
+    serializer = MotUserSerializer(queryset, many=True)
+    return Response(status=status.HTTP_200_OK, data=serializer.data)
+
 
 class MotorizadoUserView(viewsets.ReadOnlyModelViewSet):
     users = User.objects.filter(is_active=True)

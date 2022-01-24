@@ -26,6 +26,7 @@ urlpatterns = [
     path('user_admin/reg',SuperUser.as_view()),
     path('motorizado',MotorizadoView.as_view()),
     path('motorizado',MotorizadoView.as_view()),
+    path('motorizado/unactivated',views.get_mot_unactivated),
     path('motorizado/<int:id>',views.upd_mot),
     path('user/login',TokenObtainPairView.as_view()),
     path('user/refresh',TokenRefreshView.as_view()),
