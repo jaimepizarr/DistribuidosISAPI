@@ -23,6 +23,7 @@ urlpatterns = [
     path('user_exists',views.user_exists),
     path('user/register',UserSignUp.as_view()),
     path('user/<int:id>',UserSignUp.as_view()),
+    path('user/phone', views.update_phone_user),
     path('user_admin/reg',SuperUser.as_view()),
     path('motorizado',MotorizadoView.as_view()),
     path('motorizado',MotorizadoView.as_view()),

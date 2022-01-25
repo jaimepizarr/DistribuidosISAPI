@@ -80,6 +80,18 @@ class UserSignUp(APIView):
         serializer.save()
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
+@api_view(["PATCH"])
+def update_phone_user(request):
+    new_phone = Phone.objects.get_or_create(pho_number=request.data.get("new_phone"))
+    #old_phone = Phone.objects.get(pho_number=request.data.get("old_phone"))
+    phone_user = PhoneUser.objects.get(idPhone__pho_number = request.data.get("old_phone"), user= request.data.get("user_id"))
+    phone_user_ser = PhoneUserSerializer(phone_user, data={"idPhone": new_phone[0].id}, partial=True)
+    if phone_user_ser.is_valid():
+        phone_user_ser.save()
+        phone_user_retr = PhoneUserRetrieveSerializer(phone_user)
+        return Response(status=status.HTTP_200_OK, data=phone_user_retr.data)
+    return Response(status=status.HTTP_400_BAD_REQUEST, data=phone_user_ser.errors)
+
 class UserComments(APIView):
     def post(self, request, id):
         db = firestore.client()
