@@ -10,7 +10,7 @@ from django.http.response import HttpResponse, JsonResponse
 from django.http import QueryDict
 from django.shortcuts import render
 from rest_framework.views import APIView
-from backApp.models import ColorVehicle, Local, User, Motorizado, Vehicle, TypeVehicle, ModelsVehicle, Order, Client, Location, MotDeviceRegister, OrderComments, ClientLocation
+from backApp.models import ColorVehicle, Local, User, Motorizado, Vehicle, TypeVehicle, ModelsVehicle, Order, Client, Location, MotDeviceRegister, OrderComments, ClientLocation, PhoneClient
 from backApp.serializers import *
 from rest_framework.response import Response
 from rest_framework import mixins, status
@@ -317,7 +317,9 @@ def post_order(request):
                                              reference=req_location["reference"],
                                              defaults=req_location)[0]
     ClientLocation.objects.get_or_create(client = client[0], location = destiny)
-
+    phone = Phone.objects.get_or_create(pho_number = req_client.get("phone"))
+    phoneClient = PhoneClient.objects.get_or_create(client = client[0], idPhone = phone[0])
+    print(phoneClient)
     req["client"] = client[0].id
     req["destiny_loc"] = destiny.id
     req["state"] = 1
