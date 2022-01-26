@@ -26,6 +26,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore, messaging
 import ast
 from drf_yasg.utils import swagger_auto_schema
+from django.core.exceptions import MultipleObjectsReturned
 
 
 
@@ -82,12 +83,19 @@ class UserSignUp(APIView):
 
 @api_view(["PATCH"])
 def update_phone_user(request):
-    new_phone = Phone.objects.get_or_create(pho_number=request.data.get("new_phone"))
-    #old_phone = Phone.objects.get(pho_number=request.data.get("old_phone"))
-    phone_user = PhoneUser.objects.get(idPhone__pho_number = request.data.get("old_phone"), user= request.data.get("user_id"))
-    phone_user_ser = PhoneUserSerializer(phone_user, data={"idPhone": new_phone[0].id}, partial=True)
+    try:
+        new_phone = Phone.objects.get_or_create(pho_number=request.data.get("new_phone"))
+    except MultipleObjectsReturned:
+        new_phone = Phone.objects.filter(pho_number=request.data.get("new_phone"))
+    if request.data.get("old_phone"):
+        #old_phone = Phone.objects.get(pho_number=request.data.get("old_phone"))
+        phone_user = PhoneUser.objects.get(idPhone__pho_number = request.data.get("old_phone"), user= request.data.get("user_id"))
+        phone_user_ser = PhoneUserSerializer(phone_user, data={"idPhone": new_phone[0].id}, partial=True)
+    else:
+        phone_user_ser = PhoneUserSerializer(data={"idPhone": new_phone[0].id, "user": request.data.get("user_id")})
     if phone_user_ser.is_valid():
         phone_user_ser.save()
+        phone_user = PhoneUser.objects.get(idPhone__pho_number = request.data.get("new_phone"), user= request.data.get("user_id"))
         phone_user_retr = PhoneUserRetrieveSerializer(phone_user)
         return Response(status=status.HTTP_200_OK, data=phone_user_retr.data)
     return Response(status=status.HTTP_400_BAD_REQUEST, data=phone_user_ser.errors)

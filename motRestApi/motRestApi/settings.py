@@ -104,7 +104,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 'HOST':'localhost',
-        # 'PORT':'3333',
+        # 'PORT':'8080',
         'HOST':'despachomotorizado.mysql.pythonanywhere-services.com',
         'PORT':'3306',
         'NAME': 'despachomotoriza$default',
