@@ -17,6 +17,9 @@ from datetime import timedelta
 import firebase_admin
 from firebase_admin import credentials
 import pymysql  
+import environ
+env = environ.Env()
+environ.Env.read_env()
 pymysql.install_as_MySQLdb()
 
 
@@ -104,13 +107,11 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'HOST':'localhost',
-        # 'PORT':'8080',
         'HOST':'localhost',
         'PORT':'3306',
-        'NAME': 'despachomotoriza',
-        'USER':'root',
-        'PASSWORD':'useruser'
+        'NAME': env('DATABASE'),
+        'USER':env('USER'),
+        'PASSWORD':env('PASSWORD')
     },
     'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
