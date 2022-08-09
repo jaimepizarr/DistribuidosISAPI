@@ -16,11 +16,7 @@ import mimetypes
 from datetime import timedelta
 import firebase_admin
 from firebase_admin import credentials
-import pymysql  
-import environ
-env = environ.Env()
-environ.Env.read_env()
-pymysql.install_as_MySQLdb()
+import os
 
 
 mimetypes.add_type("text/javascript", ".js", True)
@@ -106,12 +102,12 @@ WSGI_APPLICATION = 'motRestApi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST':'localhost',
-        'PORT':'3306',
-        'NAME': env('DATABASE'),
-        'USER':env('USER'),
-        'PASSWORD':env('PASSWORD')
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': 'db',
+        'PORT':'5432',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER':os.environ.get('POSTGRES_USER'),
+        'PASSWORD':os.environ.get('POSTGRES_PASSWORD')
     },
     'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
