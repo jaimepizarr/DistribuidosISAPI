@@ -8,16 +8,28 @@ services:
       - POSTGRES_DB=sfe
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432
   web:
-    build: .
+    build:
+      context: web
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - .:/code
+      - .:/code/web
     ports:
-      - "8000:8000"
+      - "8000"
     environment:
       - POSTGRES_NAME=sfe
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
     depends_on:
       - db
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+       - web
+   
