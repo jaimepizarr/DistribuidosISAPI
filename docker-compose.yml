@@ -3,7 +3,7 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./data/db:/var/lib/postgresql/data1
     environment:
       - POSTGRES_DB=sfe
       - POSTGRES_USER=root
