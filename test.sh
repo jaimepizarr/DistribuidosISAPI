@@ -1,0 +1,1 @@
+locust -f locustfile.py --csv=tests --csv-full-history -u 500 -r 20
